@@ -1,6 +1,6 @@
 # Manage GitHub Repositories via Terraform and GitHub Actions Workflow
 
-This project manages GitHub repositories infrastructure via Terraform for any organization, designed to **streamline contest organization** and **eliminate setup complexity**. 
+This project manages GitHub repositories infrastructure via Terraform for any organization, designed to **streamline any organization** and **eliminate setup complexity**. 
 
 **For Organizers**: This solution enables organizers to **easily create any required number of repositories** following **standardized configurations**, ensuring all teams/projects start with identical setups and security policies. Instead of manually creating and configuring repositories one by one, organizers can deploy entire infrastructure with a single merge to main branch.
 
