@@ -1,17 +1,20 @@
 
-# GitHub Organizasyonlari icin Terraform ile Repo, Takim ve Kullanici Yönetimi
+
+# GitHub Organizasyonları için Terraform ile Repo, Takım ve Kullanıcı Yönetimi Projesi
 
 Bu Terraform konfigürasyonu, proje yönetimi için takım tabanlı bir yapıyla GitHub organizasyonunu yönetir. Kamuya açık topluluklar için tasarlanmıştır; projeler özel takımlar ve repolar ile organize edilir.
+
 
 ## Mimari Genel Bakış
 
 ### Temel Kavramlar
 
-- **Her Proje için Bir Takım**: Her proje için ayrı bir GitHub takımı oluşturulur
-- **Takım Tabanlı Erişim**: Takımlar, proje repolarına uygun izinlerle atanır
-- **Proje Liderleri**: Her projenin tüm proje repolara admin erişimi olan bir lideri vardır
-- **Branch Koruması**: Main branch korumalıdır ve kod sahibi onayı gerektirir
-- **CODEOWNERS**: Proje liderlerinin değişiklikleri onaylamasını sağlamak için otomatik oluşturulur
+- **Her Proje için Bir Takım**: Her proje için ayrı bir GitHub takımı oluşturulur.
+- **Takım Tabanlı Erişim**: Takımlar, proje repolarına uygun izinlerle atanır.
+- **Proje Liderleri**: Her projenin, tüm proje repolarına admin erişimi olan bir lideri vardır.
+- **Branch Koruması**: Main branch korumalıdır ve kod sahibi onayı gerektirir.
+- **CODEOWNERS**: Proje liderlerinin değişiklikleri onaylamasını sağlamak için otomatik olarak oluşturulur.
+
 
 ### Yapı
 
@@ -25,30 +28,35 @@ Organizasyon
 │   ├── beta-service (repo)
 │   └── Üyeler: diana (lider), eve, frank
 └── Proje Gamma (Takım)
-    ├── gamma-docs (repo)
-    └── Üyeler: grace (lider), henry
+  ├── gamma-docs (repo)
+  └── Üyeler: grace (lider), henry
 ```
+
 
 # Özellikler
 
-- ✅ **Takım Yönetimi**: Her proje için otomatik takım oluşturma
-- ✅ **Branch Otomasyonu**: Her yeni projede otomatik olarak `main`, `release`, `develop` branch'ları açılır
-- ✅ **Repo Yönetimi**: Proje başına birden fazla repo desteği
-- ✅ **Erişim Kontrolü**: Rol tabanlı izinler (lider = admin, üyeler = push/triage)
-- ✅ **Branch Koruması**: Main branch için koruma ve onay gereksinimi
-- ✅ **Dokümantasyon**: Otomatik proje ve takım dokümantasyonu
-- ✅ **Issue Yönetimi**: Etiketli ilk kurulum issue'u
-- ✅ **CODEOWNERS**: Kod inceleme gereksinimi için otomatik dosya oluşturma (isteğe bağlı)
-- ✅ **Esnek Roller**: Proje bazında farklı izin seviyeleri
-- ✅ **Çoklu Proje Desteği**: Kullanıcılar birden fazla projede farklı rollerle yer alabilir
+- ✅ **Takım Yönetimi**: Her proje için otomatik takım oluşturma.
+- ✅ **Branch Otomasyonu**: Her yeni projede otomatik olarak `main`, `release`, `develop` branch'ları açılır.
+- ✅ **Repo Yönetimi**: Proje başına birden fazla repo desteği.
+- ✅ **Erişim Kontrolü**: Rol tabanlı izinler (lider = admin, üyeler = push/triage).
+- ✅ **Branch Koruması**: Main branch için koruma ve onay gereksinimi.
+- ✅ **Dokümantasyon**: Otomatik proje ve takım dokümantasyonu.
+- ✅ **Issue Yönetimi**: Etiketli ilk kurulum issue'u.
+
+- ✅ **CODEOWNERS**: Kod inceleme gereksinimi için otomatik dosya oluşturma (isteğe bağlı).
+- ✅ **Esnek Roller**: Proje bazında farklı izin seviyeleri.
+- ✅ **Çoklu Proje Desteği**: Kullanıcılar birden fazla projede farklı rollerle yer alabilir.
 
 ## Dokümantasyon
 
-Her repoda bir `docs/` klasörü oluşturulur. Bu klasör örnek dokümantasyonu içerir. Takım liderleri ve üyeleri bu örnek belgelerden yararlanarak kendi özgün belgelerini yaratabilirler.
+
+Her repoda bir `docs/` klasörü oluşturulur. Bu klasör örnek dokümantasyonu içerir. Takım liderleri ve üyeleri bu örnek belgelerden yararlanarak kendi özgün belgelerini oluşturabilirler.
+
 
 ## Konfigürasyon Referansı
 
 ### Proje Konfigürasyonu
+
 
 Her proje için `projects` haritasında aşağıdaki alanlar desteklenir:
 
@@ -56,16 +64,16 @@ Her proje için `projects` haritasında aşağıdaki alanlar desteklenir:
 |------|-----|----------|------------|
 | `lead` | string | Proje liderinin GitHub kullanıcı adı | Geçerli bir GitHub kullanıcı adı |
 | `team_permission` | string | Takım üyeleri için temel izin | `pull`, `triage`, `push`, `maintain` |
-| `repositories` | list | Proje için repo listesi | repo Konfigürasyonu |
+| `repositories` | list | Proje için repo listesi | Repo Konfigürasyonu |
 | `members` | list | Takım üyeleri listesi | Üye Konfigürasyonu |
 
 ### Repo Konfigürasyonu
 
 | Alan | Tip | Açıklama | Seçenekler |
 |------|-----|----------|------------|
-| `name` | string | repo adı | Geçerli bir repo adı |
-| `description` | string | repo açıklaması | Herhangi bir metin |
-| `visibility` | string | repo görünürlüğü | `public`, `private` |
+| `name` | string | Repo adı | Geçerli bir repo adı |
+| `description` | string | Repo açıklaması | Herhangi bir metin |
+| `visibility` | string | Repo görünürlüğü | `public`, `private` |
 | `create_codeowners` | bool | CODEOWNERS dosyası oluşturulsun mu | `true`, `false` |
 
 ### Üye Konfigürasyonu
@@ -87,37 +95,43 @@ Her proje için `projects` haritasında aşağıdaki alanlar desteklenir:
 
 Tüm repolarda `main` branch otomatik olarak aşağıdaki kurallarla korunur:
 
-- ✅ Pull request incelemesi gereklidir (en az 1 onay)
-- ✅ Kod sahibi incelemesi gereklidir (CODEOWNERS ile)
-- ✅ Yeni commit geldiğinde eski onaylar iptal edilir
-- ✅ Durum kontrolleri güncel olmalıdır
-- ❌ Adminler için kısıtlamalar esnek olması için devre dışı
+
+- ✅ Pull request incelemesi gereklidir (en az 1 onay).
+- ✅ Kod sahibi incelemesi gereklidir (CODEOWNERS ile).
+- ✅ Yeni commit geldiğinde eski onaylar iptal edilir.
+- ✅ Durum kontrolleri güncel olmalıdır.
+- ❌ Adminler için kısıtlamalar esnek olması için devre dışı.
 
 ## En İyi Uygulamalar
 
+
 ### 1. Takım İzinleri
 
-- Sadece dokümantasyon projeleri için `triage` kullanın
-- Aktif geliştirme projeleri için `push` kullanın
-- Daha fazla kontrol gerektiren üst düzey üyeler için `maintain` kullanın
+- Sadece dokümantasyon projeleri için `triage` kullanın.
+- Aktif geliştirme projeleri için `push` kullanın.
+- Daha fazla kontrol gerektiren üst düzey üyeler için `maintain` kullanın.
+
 
 ### 2. Proje Yapısı
 
-- İlgili repoları aynı projede tutun
-- Proje adlarını açıklayıcı ve gerçek projeyi yansıtacak şekilde seçin
-- Aktif katılım gösteren net proje liderleri atayın
+- İlgili repoları aynı projede tutun.
+- Proje adlarını açıklayıcı ve gerçek projeyi yansıtacak şekilde seçin.
+- Aktif katılım gösteren, net proje liderleri atayın.
+
 
 ### 3. Güvenlik
 
-- GitHub kişisel erişim anahtarlarını düzenli olarak değiştirin
-- Takım izinlerinde en az ayrıcalık ilkesini uygulayın
+- GitHub kişisel erişim anahtarlarını düzenli olarak değiştirin.
+- Takım izinlerinde en az ayrıcalık ilkesini uygulayın.
+
 
 ### 4. Repo Yönetimi
 
-- Açık kaynak topluluk projeleri için public görünürlük kullanın
-- Repo açıklamalarını net ve bilgilendirici tutun
+- Açık kaynak topluluk projeleri için public görünürlük kullanın.
+- Repo açıklamalarını net ve bilgilendirici tutun.
 
 ## GitHub Actions: Otomatik Terraform Uygulaması
+
 
 Bu projede, ana dalda (main branch) yapılan her değişiklik sonrasında GitHub Actions otomasyonu devreye girer ve Terraform değişiklikleri otomatik olarak uygulanır.
 
@@ -132,13 +146,14 @@ Bu projede, ana dalda (main branch) yapılan her değişiklik sonrasında GitHub
 
 ### Yeni Proje Ekleme
 
+
 1. `terraform.tfvars` dosyanıza projeyi ekleyin:
 
 
 ```hcl
 projects = {
 
-   ... mevcut projeler ...
+  ...mevcut projeler...
   "yeni-proje" = {
     lead            = "yeni-lider-kullanici"
     team_permission = "push"
@@ -160,23 +175,27 @@ projects = {
 }
 ```
 
+
 2. Geri kalan işlemleri GitHub Actions otomasyonu halleder!
 
 ### Proje Silme
 
+
 ⚠️ **Uyarı**: Bu işlem takımları siler, repo erişimini kaldırır ve başka yerde referanslanmayan repoları silebilir.
 
-1. Projeyi `terraform.tfvars` dosyasından çıkarın
+
+1. Projeyi `terraform.tfvars` dosyasından çıkarın.
 2. Geri kalan işlemleri GitHub Actions otomasyonu halleder!
 
 ### Projeler Arası İşbirliği Yönetimi
+
 
 Kullanıcılar birden fazla projede farklı rollerle yer alabilir:
 
 
 ```hcl
-# "alice" proje-alpha'nın lideri, proje-beta'nın üyesi
-# Aşağıda örnek açıklamalar ile birlikte iki proje tanımı gösterilmiştir:
+  # "alice" proje-alpha'nın lideri, proje-beta'nın üyesi
+  # Aşağıda örnek açıklamalar ile birlikte iki proje tanımı gösterilmiştir:
 projects = {
   "proje-alpha" = { # "proje-alpha" takım ismi olacaktır
     lead = "alice" # proje lideri
@@ -194,27 +213,34 @@ projects = {
 }
 ```
 
+
 ## Sorun Giderme
+
 
 ### Sık Karşılaşılan Sorunlar
 
-1. **İzin Reddedildi**: GitHub token'ınızın `admin:org` yetkisine sahip olduğundan emin olun
-2. **Kullanıcı Bulunamadı**: Tüm kullanıcı adlarının GitHub'da mevcut olduğundan emin olun
-3. **repo Zaten Var**: repo adları organizasyonda benzersiz olmalıdır
-4. **Takım Adı Çakışması**: Takım adları organizasyonda benzersiz olmalıdır
+
+1. **İzin Reddedildi**: GitHub token'ınızın `admin:org` yetkisine sahip olduğundan emin olun.
+2. **Kullanıcı Bulunamadı**: Tüm kullanıcı adlarının GitHub'da mevcut olduğundan emin olun.
+3. **Repo Zaten Var**: Repo adları organizasyonda benzersiz olmalıdır.
+4. **Takım Adı Çakışması**: Takım adları organizasyonda benzersiz olmalıdır.
+
 
 ## Güvenlik Notları
 
-1. **Token Güvenliği**: GitHub token'larını asla versiyon kontrolüne eklemeyin
-2. **State Dosyası**: Terraform state dosyası hassas bilgi içerebilir - güvenli saklayın
-3. **Erişim Kontrolü**: Takım üyeliklerini ve izinleri düzenli olarak gözden geçirin
-4. **Denetim Logları**: Yetkisiz değişiklikler için GitHub denetim loglarını izleyin
+
+1. **Token Güvenliği**: GitHub token'larını asla versiyon kontrolüne eklemeyin.
+2. **State Dosyası**: Terraform state dosyası hassas bilgi içerebilir - güvenli saklayın.
+3. **Erişim Kontrolü**: Takım üyeliklerini ve izinleri düzenli olarak gözden geçirin.
+4. **Denetim Logları**: Yetkisiz değişiklikler için GitHub denetim loglarını izleyin.
 
 ## Katkı
+
 
 PR açabilir ve issue oluşturabilirsiniz.
 
 ## Lisans
+
 
 Bu proje MIT Lisansı ile lisanslanmıştır - detaylar için LICENSE dosyasına bakınız.
 
