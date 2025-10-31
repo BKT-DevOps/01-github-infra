@@ -12,7 +12,7 @@ Bu Terraform konfigürasyonu, proje yönetimi için takım tabanlı bir yapıyla
 - **Her Proje için Bir Takım**: Her proje için ayrı bir GitHub takımı oluşturulur.
 - **Takım Tabanlı Erişim**: Takımlar, proje repolarına uygun izinlerle atanır.
 - **Proje Liderleri**: Her projenin, tüm proje repolarına admin erişimi olan bir lideri vardır.
-- **Branch Koruması**: Main branch korumalıdır ve kod sahibi onayı gerektirir.
+- **Branch Koruması**: Main branch korumalıdır ve proje lideri onayı gerektirir.
 - **CODEOWNERS**: Proje liderlerinin değişiklikleri onaylamasını sağlamak için otomatik olarak oluşturulur.
 
 
