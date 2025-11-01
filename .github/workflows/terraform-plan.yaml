@@ -6,6 +6,7 @@ on:
       - main
       - release
       - develop
+      - ci-cd  # just for testing remember to remove afterwards
 
 permissions:
   contents: read
@@ -18,12 +19,12 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
-          terraform_version: ">= 1.0"
+          terraform_version: "1.9.7"
 
       - name: Terraform Init
         id: init
@@ -39,7 +40,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -out=tfplan
+        run: terraform plan -no-color
         continue-on-error: true
         env:
           TF_VAR_github_organization: ${{ secrets.ORG_GITHUB_NAME }}
