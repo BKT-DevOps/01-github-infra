@@ -1,4 +1,71 @@
+## Hızlı Başlangıç (Quick Start)
+Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için aşağıdaki adımları izleyin.
 
+### Ön Gereksinimler (Prerequisites)
+
+1.  **Terraform:** Bilgisayarınızda `1.x.x` veya üzeri bir Terraform versiyonu kurulu olmalıdır. [Terraform Kurulum Rehberi](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+2.  **GitHub Kişisel Erişim Anahtarı (Personal Access Token):** GitHub organizasyonunuzda değişiklik yapma yetkisine sahip bir PAT oluşturmanız gerekir.
+    -   Token'ı [bu linkten](https://github.com/settings/tokens/new) oluşturabilirsiniz.
+    -   Token'a mutlaka **`admin:org`** yetkisini verin.
+    -   Oluşturduğunuz token'ı güvenli bir yere kaydedin, bir daha göremeyeceksiniz.
+
+### Kurulum ve Çalıştırma
+
+1.  **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/organizasyon/proje-adi.git
+    cd proje-adi
+    ```
+2.  **Konfigürasyon Dosyasını Hazırlayın:**
+    `terraform.tfvars.example` dosyasını kopyalayarak `terraform.tfvars` adında yeni bir dosya oluşturun ve kendi bilgilerinizle doldurun.
+    ```hcl
+    # terraform.tfvars
+
+    github_organization = "sizin-github-org-adiniz"
+    github_token        = "BURAYA_PAT_TOKENINIZI_YAPISTIRIN"
+
+    projects = {
+      "proje-alpha" = {
+        lead            = "proje-lideri-kullanici-adi"
+        team_permission = "push"
+        # ... diğer proje ayarları ...
+      }
+    }
+    ```
+    **ÖNEMLİ:** `terraform.tfvars` dosyasını asla Git'e göndermeyin! `.gitignore` dosyanızda `*.tfvars` satırının olduğundan emin olun.
+
+3.  **Terraform'u Başlatın:**
+    Bu komut, gerekli GitHub provider'ını indirir.
+    ```bash
+    terraform init
+    ```
+
+4.  **Değişiklikleri Planlayın:**
+    Bu komut, GitHub üzerinde ne gibi değişiklikler (repo oluşturma, takım ekleme vb.) yapılacağını size gösterir ama henüz bir şey yapmaz.
+    ```bash
+    terraform plan
+    ```
+
+5.  **Değişiklikleri Uygulayın:**
+    Planı kontrol edip her şeyin doğru olduğundan emin olduktan sonra, değişiklikleri uygulamak için bu komutu çalıştırın.
+    ```bash
+    terraform apply
+    ```
+   <details>
+<summary>🚨 <strong>Tehlike Bölgesi (Danger Zone)</strong></summary>
+
+<p>Aşağıdaki komut, bu Terraform konfigürasyonu tarafından yönetilen <strong>tüm kaynakları kalıcı olarak yok edecektir.</strong> Bu, GitHub organizasyonunuzdaki repoları, takımları ve üyelikleri sileceği anlamına gelir.</p>
+
+<p><strong>Bu işlemi yapmadan önce iki kez düşünün. Geri alınamaz.</strong></p>
+
+<h4>Tüm Kaynakları Yok Et</h4>
+<p>Her şeyi silmek için aşağıdaki komutu çalıştırın ve sizden onay istendiğinde <code>yes</code> yazın.</p>
+
+```bash
+# DİKKAT: Bu komut, yönetilen tüm kaynakları kalıcı olarak silecektir.
+terraform destroy
+```
+</details>
 
 # GitHub Organizasyonları için Terraform ile Repo, Takım ve Kullanıcı Yönetimi Projesi
 
