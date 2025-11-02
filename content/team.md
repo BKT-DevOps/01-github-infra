@@ -1,74 +1,65 @@
-# {{PROJECT_NAME}} Team
+# {{PROJECT_NAME}} Takımı ve Rolleri
 
-## Team Members
+<details open>
+<summary><strong>🇹🇷 Türkçe</strong></summary>
 
-| Role | Seniority | Tech Stack | Notes | Status |
-|------|-----------|------------|-------|--------|
-|      |           |            |       |        |
-|      |           |            |       |        |
-|      |           |            |       |        |
-|      |           |            |       |        |
-|      |           |            |       |        |
+<br>
 
-## Role Definitions
+Bu projedeki güncel ekip üyelerini ve rollerini görmek için lütfen GitHub'ın kendi takım sayfasını ziyaret edin. Oradaki liste **her zaman günceldir**.
 
-### Project Lead
-- Overall project responsibility
-- Technical decision making
-- Team coordination
-- Stakeholder communication
-
-### Senior Developer
-- Technical leadership
-- Architecture decisions
-- Code review and mentoring
-- Complex feature development
-
-### Developer
-- Feature development
-- Bug fixes
-- Code review participation
-- Documentation updates
-
-### Junior Developer
-- Learning and development
-- Simple feature implementation
-- Bug fixes under guidance
-- Documentation maintenance
-
-## Seniority Levels
-
-- **Senior (5+ years)**: Independent work, mentoring others, architectural decisions
-- **Mid (2-5 years)**: Independent feature development, some mentoring
-- **Junior (0-2 years)**: Learning, guided development, growing skills
-
-## Tech Stack Categories
-
-Common technology areas for this project:
-
-- **Frontend**: React, Vue, Angular, HTML/CSS, JavaScript/TypeScript
-- **Backend**: Node.js, Python, Java, Go, PHP, .NET
-- **Database**: PostgreSQL, MySQL, MongoDB, Redis
-- **DevOps**: Docker, Kubernetes, AWS, Azure, GCP
-- **Mobile**: React Native, Flutter, iOS, Android
-- **Other**: Specify other relevant technologies
-
-## Status Options
-
-- **Active**: Currently working on the project
-- **On Leave**: Temporarily away from the project
-- **Alumni**: Former team member
-- **Consultant**: External contributor
-
-## Notes
-
-Use the Notes column for:
-- Specific areas of expertise
-- Availability constraints
-- Special responsibilities
-- Contact preferences
-- Time zone information
+### ➡️ [Güncel Takım Listesi İçin Tıkla](https://github.com/orgs/{{GITHUB_ORG}}/teams/{{PROJECT_NAME}})
 
 ---
 
-*Update this table as team composition changes*
+Bu dokümanın amacı ise projedeki rolleri ve sorumlulukları tanımlamaktır.
+
+### 📜 Rol Tanımları
+
+#### Proje Lideri (Project Lead)
+*   Projenin genel vizyonundan ve teknik yönünden sorumludur.
+*   Nihai teknik kararları verir ve mimariyi yönlendirir.
+*   Takım koordinasyonunu sağlar ve `pull request`'lerde son onay merciidir.
+
+#### Takım Sorumlusu (Maintainer)
+*   Proje liderine teknik konularda yardımcı olur.
+*   Kod kalitesini denetler, `pull request`'leri inceler ve onaylar.
+*   Yeni katılan üyelere mentorluk yapar.
+
+#### Üye (Member)
+*   Projenin gelişimine aktif olarak kod yazarak, dokümantasyon hazırlayarak veya issue'ları çözerek katkıda bulunur.
+*   `Pull request` açar ve diğer üyelerin kodlarını inceler.
+*   Projenin standartlarına ve geliştirme akışına uyar.
+
+</details>
+
+<details>
+<summary><strong>🇬🇧 English</strong></summary>
+
+<br>
+
+To see the current members and roles of this project, please visit the official GitHub Team page. The list there is **always up-to-date**.
+
+### ➡️ [Click Here for the Current Team List](https://github.com/orgs/{{GITHUB_ORG}}/teams/{{PROJECT_NAME}})
+
+---
+
+The purpose of this document is to define the roles and responsibilities within the project.
+
+### 📜 Role Definitions
+
+#### Project Lead
+*   Responsible for the overall vision and technical direction of the project.
+*   Makes final technical decisions and guides the architecture.
+*   Ensures team coordination and is the final approver on pull requests.
+
+#### Maintainer
+*   Assists the Project Lead in technical matters.
+*   Monitors code quality, reviews and approves pull requests.
+*   Mentors new members.
+
+#### Member
+*   Actively contributes to the project by writing code, creating documentation, or resolving issues.
+*   Opens pull requests and reviews code from other members.
+*   Adheres to the project's standards and development workflow.
+
+</details>
