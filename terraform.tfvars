@@ -1,8 +1,7 @@
 # GitHub Configuration
 github_organization = "BKT-DevOps"
-# github_token is set via environment variable: export TF_VAR_github_token="your_github_token"
 
-
+# Example Project Configuration
 # "project-alpha" = {  # "project-alpha" takım ismi olacaktır
 #   lead            = "flovearth" # proje lideri
 #   team_permission = "push" # takım izni
