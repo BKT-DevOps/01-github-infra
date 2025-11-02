@@ -50,20 +50,6 @@ output "project_summary" {
   }
 }
 
-# NOTE: Project boards output removed due to GitHub Projects Classic deprecation
-# Use PROJECTS_V2_SETUP.md guide to manually create Projects V2
-# 
-# output "project_boards" {
-#   description = "Information about created project boards"
-#   value = {
-#     for project_name, board in github_repository_project.project_board : project_name => {
-#       id   = board.id
-#       name = board.name
-#       url  = board.url
-#     }
-#   }
-# }
-
 output "initial_issues" {
   description = "Initial setup issues created for each project"
   value = {
