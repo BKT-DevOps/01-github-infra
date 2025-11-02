@@ -1,4 +1,4 @@
-## Initial Project Setup
+<!-- ## Initial Project Setup
 
 This issue tracks the initial setup tasks for the {{PROJECT_NAME}} project.
 
@@ -11,7 +11,7 @@ This issue tracks the initial setup tasks for the {{PROJECT_NAME}} project.
 - [ ] Set up issue templates
 - [ ] Configure branch protection rules
 
-Assigned to: @{{PROJECT_LEAD}}
+Assigned to: @{{PROJECT_LEAD}} -->
 
 
 ## {{PROJECT_NAME}} Projesi Başlangıç Görevleri
