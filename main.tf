@@ -221,7 +221,7 @@ resource "github_repository_file" "team" {
 
   repository = github_repository.repo[each.key].name
   file       = "docs/TEAM.md"
-  
+
   content = replace(
     replace(
       replace(
@@ -245,16 +245,16 @@ resource "github_repository_file" "team" {
       for m in var.projects[each.value.project_name].members : m if m.role == "member"
     ]))
   )
-  
+
   commit_message      = "Add team documentation"
   overwrite_on_create = true
-  
+
   depends_on = [
     github_repository.repo,
     github_team_repository.access,
     github_repository_collaborator.lead
   ]
-  
+
   lifecycle {
     ignore_changes = [content]
   }
@@ -299,7 +299,7 @@ resource "github_repository_file" "wiki_home" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
   repository = github_repository.repo[each.key].name
-  file       = "docs/WIKI_HOME.md"  # Wiki için referans
+  file       = "docs/WIKI_HOME.md" # Wiki için referans
   content = replace(
     replace(
       file("${path.module}/sample_repo_docs/wiki.md"),
@@ -309,7 +309,7 @@ resource "github_repository_file" "wiki_home" {
   )
   commit_message      = "Add wiki home documentation"
   overwrite_on_create = true
-  
+
   lifecycle {
     ignore_changes = [content]
   }
