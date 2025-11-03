@@ -26,7 +26,7 @@ resource "github_repository" "repo" {
   delete_branch_on_merge = true
   auto_init              = true
 
-# Optional License
+  # Optional License
   license_template = each.value.license
 
   # Enable branch protection
