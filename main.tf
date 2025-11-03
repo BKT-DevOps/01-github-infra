@@ -192,10 +192,10 @@ resource "github_repository_file" "docs_project" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
   repository = github_repository.repo[each.key].name
-  file       = "docs/PROJECT.md"
+  file       = "docs/project_definition.md"
   content = replace(
     replace(
-      file("${path.module}/sample_repo_docs/project.md"),
+      file("${path.module}/sample_repo_docs/project_definition.md"),
       "{{PROJECT_NAME}}", each.value.project_name
     ),
     "{{PROJECT_LEAD}}", each.value.lead
