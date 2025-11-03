@@ -1,8 +1,8 @@
 # Katkıda Bulunma Rehberi | Contributing Guide
+<details open>
+<summary><strong>🇹🇷 Türkçe</strong></summary>
 
-## 🇹🇷 Türkçe
-
-### Katkıda Bulunma
+## Katkıda Bulunma
 
 BKT-DevOps topluluğuna katkıda bulunmak istediğiniz için teşekkür ederiz! 🎉
 
@@ -113,11 +113,11 @@ description="Example"
 Katkılarınız `LICENSE` dosyasında belirtilen lisans altındadır.
 
 **Teşekkürler! Her katkı topluluğumuzu güçlendirir.** 💪
-
+</details>
 ---
 
-## 🇬🇧 English
-
+<details open>
+<summary><strong>🇬🇧 English</strong></summary>
 ### Contributing
 
 Thank you for considering contributing to BKT-DevOps community! 🎉
@@ -229,7 +229,7 @@ description="Example"
 Your contributions are under the license specified in `LICENSE`.
 
 **Thank you! Every contribution strengthens our community.** 💪
-
+</details>
 ---
 
 **Son güncelleme | Last updated:** 20 Mayıs 2025 | May 20, 2025
