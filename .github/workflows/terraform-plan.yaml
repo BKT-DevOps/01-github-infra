@@ -79,6 +79,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
             const output = `#### Terraform Plan Results
             
             | Step | Status |
@@ -88,7 +90,7 @@ jobs:
             | Validate | \`${{ steps.validate.outcome }}\` |
             | Plan | \`${{ steps.plan.outcome }}\` |
             
-            **Note:** Full plan output is available in the [workflow run logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            **Note:** Full plan output is available in the [workflow run logs](${runUrl}).
             
             *Triggered by @${{ github.actor }}*`;
       
@@ -118,5 +120,11 @@ jobs:
             }
 
       - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+        run: |
+          if [ "${{ steps.plan.outcome }}" == "success" ]; then
+            echo "✅ Terraform plan completed successfully"
+            exit 0
+          else
+            echo "❌ Terraform plan failed"
+            exit 1
+          fi
