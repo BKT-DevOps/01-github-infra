@@ -1,6 +1,12 @@
 
 <img width="1536" height="1024" alt="team_logo" src="https://github.com/user-attachments/assets/f59340f1-9ecd-4ead-9091-bc853bc50924" />
 
+<details open>
+<summary><strong>🇹🇷 Türkçe</strong></summary>
+
+<br>
+
+
 # GitHub Organizasyonları için Terraform ile Repo, Takım ve Kullanıcı Yönetimi Projesi
 
 Bu Terraform konfigürasyonu, proje yönetimi için takım tabanlı bir yapıyla GitHub organizasyonunu yönetir. Kamuya açık topluluklar için tasarlanmıştır; projeler özel takımlar ve repolar ile organize edilir.
@@ -32,7 +38,6 @@ Organizasyon
   ├── gamma-docs (repo)
   └── Üyeler: grace (lider), henry
 ```
-
 
 # Özellikler
 
@@ -244,8 +249,11 @@ PR açabilir ve issue oluşturabilirsiniz.
 
 
 Bu proje MIT Lisansı ile lisanslanmıştır - detaylar için LICENSE dosyasına bakınız.
+</details>
+<details>
+<summary><strong>🇬🇧 English</strong></summary>
 
----
+<br>
 
 # GitHub Organization Management via Terraform
 
@@ -439,17 +447,11 @@ projects = {
   }
 }
 ```
+</details>
 
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Permission Denied**: Ensure your GitHub token has `admin:org` scope
-2. **User Not Found**: Verify all usernames exist on GitHub
-3. **Repository Exists**: Repository names must be unique in the organization
-4. **Team Name Conflicts**: Team names must be unique in the organization
-
+<details>
+<summary><strong>Hızlı Başlangıç</strong></summary>
+<br>
 
 ## Hızlı Başlangıç (Quick Start)
 Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için aşağıdaki adımları izleyin.
@@ -504,7 +506,6 @@ Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için 
     ```bash
     terraform apply
     ```
-   <details>
 <summary>🚨 <strong>Tehlike Bölgesi (Danger Zone)</strong></summary>
 
 <p>Aşağıdaki komut, bu Terraform konfigürasyonu tarafından yönetilen <strong>tüm kaynakları kalıcı olarak yok edecektir.</strong> Bu, GitHub organizasyonunuzdaki repoları, takımları ve üyelikleri sileceği anlamına gelir.</p>
@@ -519,6 +520,19 @@ Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için 
 terraform destroy
 ```
 </details>
+<details>
+<summary><strong>Çözümleme (Troubleshooting)</strong></summary>
+
+### Common Issues
+
+1. **Permission Denied**: Ensure your GitHub token has `admin:org` scope
+2. **User Not Found**: Verify all usernames exist on GitHub
+3. **Repository Exists**: Repository names must be unique in the organization
+4. **Team Name Conflicts**: Team names must be unique in the organization
+
+</details>
+<details>
+<summary><strong>Güvenlik Dikkatleri (Security Considerations)</strong></summary>
 
 ## Security Considerations
 
@@ -527,10 +541,13 @@ terraform destroy
 3. **Access Control**: Regularly review team memberships and permissions
 4. **Audit Logging**: Monitor GitHub audit logs for unauthorized changes
 
-## Contributing
+</details>
+<details>
+<summary><strong>Katkıda Bulunma (Contributing)</strong></summary>
 
 Please feel free to raise a PR and create issue.
-
-## License
+</details>
+<details>
+<summary><strong>Lisans (License)</strong></summary>
 
 This project is licensed under the MIT License - see the LICENSE file for details.

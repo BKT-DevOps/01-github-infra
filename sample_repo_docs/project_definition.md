@@ -26,7 +26,7 @@ _(Projenin neleri içerdiğini ve neleri **içermediğini** burada belirtin.)_
 Bu projenin teknik ve idari liderliğinden **@{{PROJECT_LEAD}}** sorumludur.
 
 ### 🔗 İlgili Bağlantılar
-*   **[Takım Bilgileri](TEAM.md):** Proje ekibi ve rolleri.
+*   **[Takım Bilgileri](team.md):** Proje ekibi ve rolleri.
 *   **Proje Panosu:** _(Varsa GitHub Projects panosunun linkini buraya ekleyin)_
 
 ---
