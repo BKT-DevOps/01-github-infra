@@ -168,7 +168,7 @@ resource "github_issue" "initial_setup" {
   title      = "Initial Setup"
   body = replace(
     replace(
-      file("${path.module}/content/initial-setup-issue.md"),
+      file("${path.module}/sample_repo_docs/initial-setup-issue.md"),
       "{{PROJECT_NAME}}", each.key
     ),
     "{{PROJECT_LEAD}}", each.value.lead
@@ -195,7 +195,7 @@ resource "github_repository_file" "docs_project" {
   file       = "docs/PROJECT.md"
   content = replace(
     replace(
-      file("${path.module}/content/project.md"),
+      file("${path.module}/sample_repo_docs/project.md"),
       "{{PROJECT_NAME}}", each.value.project_name
     ),
     "{{PROJECT_LEAD}}", each.value.lead
@@ -270,7 +270,7 @@ resource "github_repository_file" "readme" {
     replace(
       replace(
         replace(
-          file("${path.module}/content/readme.md"),
+          file("${path.module}/sample_repo_docs/readme.md"),
           "{{PROJECT_NAME}}", each.value.project_name
         ),
         "{{PROJECT_LEAD}}", each.value.lead
@@ -289,6 +289,27 @@ resource "github_repository_file" "readme" {
 
   overwrite_on_create = true # This will overwrite the auto-generated README
 
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
+# Opsiyonel: Wiki sayfaları
+resource "github_repository_file" "wiki_home" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository = github_repository.repo[each.key].name
+  file       = "docs/WIKI_HOME.md"  # Wiki için referans
+  content = replace(
+    replace(
+      file("${path.module}/sample_repo_docs/wiki.md"),
+      "{{PROJECT_NAME}}", each.value.project_name
+    ),
+    "{{PROJECT_LEAD}}", each.value.lead
+  )
+  commit_message      = "Add wiki home documentation"
+  overwrite_on_create = true
+  
   lifecycle {
     ignore_changes = [content]
   }

@@ -1,4 +1,8 @@
 
+<details open>
+<summary><strong>🇹🇷 Türkçe</strong></summary>
+
+<br>
 
 # GitHub Organizasyonları için Terraform ile Repo, Takım ve Kullanıcı Yönetimi Projesi
 
@@ -31,7 +35,6 @@ Organizasyon
   ├── gamma-docs (repo)
   └── Üyeler: grace (lider), henry
 ```
-
 
 # Özellikler
 
@@ -243,8 +246,12 @@ PR açabilir ve issue oluşturabilirsiniz.
 
 
 Bu proje MIT Lisansı ile lisanslanmıştır - detaylar için LICENSE dosyasına bakınız.
-
+</details>
 ---
+<details>
+<summary><strong>🇬🇧 English</strong></summary>
+
+<br>
 
 # GitHub Organization Management via Terraform
 
@@ -438,7 +445,7 @@ projects = {
   }
 }
 ```
-
+</details>
 
 ## Troubleshooting
 
@@ -449,6 +456,9 @@ projects = {
 3. **Repository Exists**: Repository names must be unique in the organization
 4. **Team Name Conflicts**: Team names must be unique in the organization
 
+<details>
+<summary><strong>Hızlı Başlangıç</strong></summary>
+<br>
 
 ## Hızlı Başlangıç (Quick Start)
 Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için aşağıdaki adımları izleyin.
@@ -519,6 +529,7 @@ terraform destroy
 ```
 </details>
 
+</details>
 ## Security Considerations
 
 1. **Token Security**: Never commit GitHub tokens to version control
