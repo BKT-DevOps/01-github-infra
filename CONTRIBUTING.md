@@ -1,4 +1,3 @@
-```markdown
 # Katkıda Bulunma Rehberi | Contributing Guide
 
 ## 🇹🇷 Türkçe
