@@ -26,6 +26,9 @@ resource "github_repository" "repo" {
   delete_branch_on_merge = true
   auto_init              = true
 
+# Optional License
+  license_template = each.value.license
+
   # Enable branch protection
   allow_merge_commit = true
   allow_squash_merge = true
@@ -305,6 +308,7 @@ locals {
         visibility      = repo.visibility
         lead            = project.lead
         team_permission = project.team_permission
+        license         = try(repo.license, null)
       }
     ]
   ])
