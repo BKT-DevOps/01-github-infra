@@ -539,7 +539,7 @@ terraform destroy
 1. **Token Security**: Never commit GitHub tokens to version control
 2. **State File**: Terraform state may contain sensitive information - store securely
 3. **Access Control**: Regularly review team memberships and permissions
-4. **Audit Logging**: Monitor GitHub audit logs for unauthorized changes
+4. **Audit Logging**: Monitor GitHub audit logs for unauthorized change
 
 </details>
 <details>
