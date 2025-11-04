@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "01-github-infra"
+    bucket  = "seyid-terraform-state"
     key     = "01-github-infra/terraform.tfstate"
     region  = "eu-west-2"
     encrypt = true
