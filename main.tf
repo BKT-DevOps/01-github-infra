@@ -109,9 +109,10 @@ resource "github_branch_protection" "main" {
 
   depends_on = [
     github_repository_file.docs_project,
-    github_repository_file.team,
     github_repository_file.readme,
-    github_repository_file.codeowners
+    github_repository_file.codeowners,
+    github_repository_file.docs_architecture,
+    github_repository_file.docs_workflow
   ]
 }
 
@@ -213,6 +214,44 @@ resource "github_repository_file" "docs_project" {
   lifecycle {
     ignore_changes = [content]
   }
+}
+# Architecture Overview dokümanı
+resource "github_repository_file" "docs_architecture" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  file           = "docs/Architecture-Overview.md"
+  content        = file("${path.module}/sample_repo_docs/Architecture-Overview.md")
+  commit_message = "Add Architecture Overview document"
+
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo,
+    github_team_repository.access,
+    github_repository_collaborator.lead
+  ]
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
+# Development Workflow dokümanı
+resource "github_repository_file" "docs_workflow" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  file           = "docs/Development-Workflow.md"
+  content        = file("${path.module}/sample_repo_docs/Development-Workflow.md")
+  commit_message = "Add Development Workflow document"
+
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo,
+    github_team_repository.access,
+    github_repository_collaborator.lead
+  ]
 }
 
 # Team sayfası için dinamik içerik
