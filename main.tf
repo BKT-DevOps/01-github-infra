@@ -109,9 +109,10 @@ resource "github_branch_protection" "main" {
 
   depends_on = [
     github_repository_file.docs_project,
-    github_repository_file.docs_team,
     github_repository_file.readme,
-    github_repository_file.codeowners
+    github_repository_file.codeowners,
+    github_repository_file.docs_architecture,
+    github_repository_file.docs_workflow
   ]
 }
 
@@ -168,7 +169,7 @@ resource "github_issue" "initial_setup" {
   title      = "Initial Setup"
   body = replace(
     replace(
-      file("${path.module}/content/initial-setup-issue.md"),
+      file("${path.module}/sample_repo_docs/initial-setup-issue.md"),
       "{{PROJECT_NAME}}", each.key
     ),
     "{{PROJECT_LEAD}}", each.value.lead
@@ -192,10 +193,10 @@ resource "github_repository_file" "docs_project" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
   repository = github_repository.repo[each.key].name
-  file       = "docs/PROJECT.md"
+  file       = "docs/project_definition.md"
   content = replace(
     replace(
-      file("${path.module}/content/project.md"),
+      file("${path.module}/sample_repo_docs/project_definition.md"),
       "{{PROJECT_NAME}}", each.value.project_name
     ),
     "{{PROJECT_LEAD}}", each.value.lead
@@ -214,18 +215,77 @@ resource "github_repository_file" "docs_project" {
     ignore_changes = [content]
   }
 }
+# Architecture Overview dokümanı
+resource "github_repository_file" "docs_architecture" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
-resource "github_repository_file" "docs_team" {
+  repository     = github_repository.repo[each.key].name
+  file           = "docs/Architecture-Overview.md"
+  content        = file("${path.module}/sample_repo_docs/Architecture-Overview.md")
+  commit_message = "Add Architecture Overview document"
+
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo,
+    github_team_repository.access,
+    github_repository_collaborator.lead
+  ]
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
+# Development Workflow dokümanı
+resource "github_repository_file" "docs_workflow" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  file           = "docs/Development-Workflow.md"
+  content        = file("${path.module}/sample_repo_docs/Development-Workflow.md")
+  commit_message = "Add Development Workflow document"
+
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo,
+    github_team_repository.access,
+    github_repository_collaborator.lead
+  ]
+}
+
+# Team sayfası için dinamik içerik
+resource "github_repository_file" "team" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
   repository = github_repository.repo[each.key].name
   file       = "docs/TEAM.md"
-  content = replace(
-    file("${path.module}/content/team.md"),
-    "{{PROJECT_NAME}}", each.value.project_name
-  )
-  commit_message = "Add team documentation"
 
+  content = replace(
+    replace(
+      replace(
+        replace(
+          replace(
+            replace(
+              file("${path.module}/sample_repo_docs/team.md"),
+              "{{PROJECT_NAME}}", each.value.project_name
+            ),
+            "{{GITHUB_ORG}}", var.github_organization
+          ),
+          "{{PROJECT_LEAD}}", each.value.lead
+        ),
+        "{{MEMBER_COUNT}}", tostring(length(var.projects[each.value.project_name].members))
+      ),
+      "{{MAINTAINER_COUNT}}", tostring(length([
+        for m in var.projects[each.value.project_name].members : m if m.role == "maintainer"
+      ]))
+    ),
+    "{{REGULAR_MEMBER_COUNT}}", tostring(length([
+      for m in var.projects[each.value.project_name].members : m if m.role == "member"
+    ]))
+  )
+
+  commit_message      = "Add team documentation"
   overwrite_on_create = true
 
   depends_on = [
@@ -249,7 +309,7 @@ resource "github_repository_file" "readme" {
     replace(
       replace(
         replace(
-          file("${path.module}/content/readme.md"),
+          file("${path.module}/sample_repo_docs/readme.md"),
           "{{PROJECT_NAME}}", each.value.project_name
         ),
         "{{PROJECT_LEAD}}", each.value.lead
@@ -273,6 +333,27 @@ resource "github_repository_file" "readme" {
   }
 }
 
+# Opsiyonel: Wiki sayfaları
+resource "github_repository_file" "wiki_home" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository = github_repository.repo[each.key].name
+  file       = "docs/WIKI_HOME.md" # Wiki için referans
+  content = replace(
+    replace(
+      file("${path.module}/sample_repo_docs/wiki.md"),
+      "{{PROJECT_NAME}}", each.value.project_name
+    ),
+    "{{PROJECT_LEAD}}", each.value.lead
+  )
+  commit_message      = "Add wiki home documentation"
+  overwrite_on_create = true
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
 # Local values for processing complex data structures
 locals {
   # Map project names to their first repository (main repo)
@@ -287,7 +368,7 @@ locals {
       repository = project.repositories[0].name
       content = replace(
         replace(
-          file("${path.module}/content/wiki.md"),
+          file("${path.module}/sample_repo_docs/wiki.md"),
           "{{PROJECT_NAME}}", project_name
         ),
         "{{PROJECT_LEAD}}", project.lead
