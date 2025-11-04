@@ -1,0 +1,35 @@
+name: Terraform Plan with Slack
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/slack-notify
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color > plan_output.txt
+
+      - name: Send plan result to Slack
+        if: always()
+        run: |
+          PLAN=$(cat plan_output.txt)
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\":construction: Terraform Plan Result:\n\`\`\`${PLAN}\`\`\`\"}" \
+            ${{ secrets.SLACK_WEBHOOK_URL }}
