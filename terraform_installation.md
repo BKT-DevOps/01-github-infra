@@ -1,4 +1,4 @@
-# 🌍 Terraform Kurulumu(Windows/Linux(MacOS)
+# 🌍 Terraform Kurulumu (Windows/Linux/MacOS)
 
 Bu doküman, **Terraform**'un Windows, Linux ve macOS işletim sistemlerine nasıl kurulacağını adım adım açıklar.  
 Terraform, altyapıyı kodla yönetmeyi sağlayan (Infrastructure as Code – IaC) güçlü bir araçtır.
