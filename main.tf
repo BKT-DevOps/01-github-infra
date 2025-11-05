@@ -19,10 +19,10 @@ resource "github_repository" "repo" {
   description = each.value.description
   visibility  = each.value.visibility
 
-  has_issues   = true
-  has_wiki     = true
-  has_projects = true
-  has_discussions  = true
+  has_issues      = true
+  has_wiki        = true
+  has_projects    = true
+  has_discussions = true
 
   delete_branch_on_merge = true
   auto_init              = true
@@ -432,25 +432,25 @@ locals {
 resource "github_repository_file" "issue_template_config" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
-  repository = github_repository.repo[each.key].name
-  branch     = "main"
-  file       = ".github/ISSUE_TEMPLATE/config.yml"
-  content    = file("${path.module}/sample_repo_docs/config.yml")
-  commit_message = "Add issue template config for reporting"
+  repository          = github_repository.repo[each.key].name
+  branch              = "main"
+  file                = ".github/ISSUE_TEMPLATE/config.yml"
+  content             = file("${path.module}/sample_repo_docs/config.yml")
+  commit_message      = "Add issue template config for reporting"
   overwrite_on_create = true
-  depends_on = [github_repository.repo]
+  depends_on          = [github_repository.repo]
 }
 
 resource "github_repository_file" "report_abuse_template" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
 
-  repository     = github_repository.repo[each.key].name
-  branch         = "main"
-  file           = ".github/ISSUE_TEMPLATE/report-abuse.yml"
-  content        = file("${path.module}/sample_repo_docs/report-abuse.yml")
-  commit_message = "Add report-abuse issue template"
+  repository          = github_repository.repo[each.key].name
+  branch              = "main"
+  file                = ".github/ISSUE_TEMPLATE/report-abuse.yml"
+  content             = file("${path.module}/sample_repo_docs/report-abuse.yml")
+  commit_message      = "Add report-abuse issue template"
   overwrite_on_create = true
-  depends_on = [github_repository.repo]
+  depends_on          = [github_repository.repo]
 
   lifecycle {
     ignore_changes = [content]
