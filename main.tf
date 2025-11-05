@@ -22,6 +22,7 @@ resource "github_repository" "repo" {
   has_issues   = true
   has_wiki     = true
   has_projects = true
+  has_discussions  = true
 
   delete_branch_on_merge = true
   auto_init              = true
@@ -336,6 +337,26 @@ resource "github_repository_file" "readme" {
   }
 }
 
+# --- Code of Conduct dosyasını her repoya ekle ---
+resource "github_repository_file" "code_of_conduct" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  branch         = "main"
+  file           = "CODE_OF_CONDUCT.md"
+  content        = file("${path.module}/sample_repo_docs/CODE_OF_CONDUCT.md")
+  commit_message = "Add CODE_OF_CONDUCT.md file"
+
+  overwrite_on_create = true
+
+  depends_on = [github_repository.repo]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
+
 # Opsiyonel: Wiki sayfaları
 resource "github_repository_file" "wiki_home" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
@@ -405,3 +426,33 @@ locals {
     ]
   ])
 }
+
+# --- Raporlamayı etkinleştirmek için sorun şablonu yapılandırmasını ekle ---
+resource "github_repository_file" "issue_template_config" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository = github_repository.repo[each.key].name
+  branch     = "main"
+  file       = ".github/ISSUE_TEMPLATE/config.yml"
+  content    = file("${path.module}/sample_repo_docs/config.yml")
+  commit_message = "Add issue template config for reporting"
+  overwrite_on_create = true
+  depends_on = [github_repository.repo]
+}
+
+resource "github_repository_file" "report_abuse_template" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  branch         = "main"
+  file           = ".github/ISSUE_TEMPLATE/report-abuse.yml"
+  content        = file("${path.module}/sample_repo_docs/report-abuse.yml")
+  commit_message = "Add report-abuse issue template"
+  overwrite_on_create = true
+  depends_on = [github_repository.repo]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
