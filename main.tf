@@ -308,7 +308,7 @@ locals {
         visibility      = repo.visibility
         lead            = project.lead
         team_permission = project.team_permission
-        license         = try(repo.license, null)
+        license         = try(repo.license, "mit")
       }
     ]
   ])
