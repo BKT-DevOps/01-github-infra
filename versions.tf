@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "01-github-infra"
-    key     = "01-github-infra/terraform.tfstate"
+    key     = "terraform.tfstate"
     region  = "eu-west-2"
     encrypt = true
   }
