@@ -1,6 +1,42 @@
 # GitHub Configuration
 github_organization = "BKT-DevOps"
 
+
+# -----------------------------------------------------------
+# Access Matrix (Unified Team Roles & Repository Permissions)
+# -----------------------------------------------------------
+access_matrix = {
+  "lead" = {
+    role        = "lead"
+    permission  = "maintain"
+    description = "Proje lideri, tüm erişimlere sahiptir."
+  }
+  "maintainer" = {
+    role        = "maintainer"
+    permission  = "push"
+    description = "Takım yöneticisi, kod ve ayar değişiklikleri yapabilir."
+  }
+  "contributor" = {
+    role        = "contributor"
+    permission  = "triage"
+    description = "Kod katkısı sağlar, değişiklik önerir."
+  }
+  "reviewer" = {
+    role        = "reviewer"
+    permission  = "pull"
+    description = "Kod incelemesi yapabilir, doğrudan değişiklik yapamaz."
+  }
+  "community" = {
+    role        = "community"
+    permission  = "pull"
+    description = "Topluluk üyesi, repo içeriğini görebilir."
+  }
+}
+
+# -----------------------------------------------------------
+# END - Access Matrix (Unified Team Roles & Repository Permissions)
+# -----------------------------------------------------------
+
 # Example Project Configuration
 # "project-alpha" = {  # "project-alpha" takım ismi olacaktır
 #   lead            = "flovearth" # proje lideri
