@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📜 Uygunsuz içeriği bildir
+    url: https://github.com/${var.github_organization}/${REPO_NAME}/issues/new?template=report-abuse.yml
+    about: Taciz, nefret söylemi veya davranış kurallarına aykırı içerikleri bildirmek için kullanın.

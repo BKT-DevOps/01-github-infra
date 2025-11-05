@@ -1,0 +1,19 @@
+name: Uygunsuz İçerik Bildir
+description: Taciz, nefret söylemi veya davranış kurallarına aykırı içerikleri bildirmek için kullanın
+title: "[Rapor] Uygunsuz İçerik"
+labels: ["report"]
+body:
+  - type: textarea
+    id: content
+    attributes:
+      label: Bildirmek istediğiniz içerik
+      description: Lütfen durumu mümkün olduğunca ayrıntılı yazın (ör. kullanıcı yorumları, mesaj veya kod parçacıkları)
+      placeholder: Buraya bildirmek istediğiniz içerik ile ilgili detayları yazın...
+      required: true
+
+  - type: input
+    id: reporter
+    attributes:
+      label: Bildiriyi yapan kişi
+      description: GitHub kullanıcı adınızı girin (opsiyonel)
+      placeholder: kullaniciadi
