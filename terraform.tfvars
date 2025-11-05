@@ -34,44 +34,63 @@ github_organization = "BKT-DevOps"
 
 # Projects Configuration
 projects = {
-  "project-alpha" = {
+  "InfraCoders" = {
     lead            = "flovearth"
     team_permission = "push"
     repositories = [
       {
-        name        = "to-do-api"
-        description = "API service for Project To-Do"
+        name        = "project-terraform-github"
+        description = "Terraform ile GitHub Repolarının Otomatik yönetimi"
         visibility  = "public"
       },
 
-      {
-        name        = "to-do-web"
-        description = "Web interface for Project To-Do"
-        visibility  = "public"
-      }
     ]
     members = [
       {
-        username = "ismailaricioglu"
-        role     = "maintainer"
+        username = "barisbutun"
+        role     = "member"
+      },
+      {
+        username = "hakanceran64"
+        role     = "member"
       },
       {
         username = "hulyaoner"
         role     = "member"
       },
       {
-        username = "lerkush"
+        username = "ismailaricioglu"
         role     = "member"
       },
       {
-        username = "flovearth"
+        username = "karalarmehmet"
+        role     = "member"
+      },
+      {
+        username = "kheif"
+        role     = "member"
+      },
+      {
+        username = "purfatih"
+        role     = "member"
+      },
+      {
+        username = "seyid12"
+        role     = "member"
+      },
+      {
+        username = "Shamsiaa"
+        role     = "member"
+      },
+      {
+        username = "slymanmrcan"
         role     = "member"
       }
     ]
   }
 
-  "project-beta" = {
-    lead            = "ismailaricioglu"
+  "kovan" = {
+    lead            = "hakanceran64"
     team_permission = "push"
     repositories = [
       {
@@ -82,7 +101,7 @@ projects = {
     ]
     members = [
       {
-        username = "lerkush"
+        username = "flovearth"
         role     = "maintainer"
       },
       {
@@ -94,15 +113,19 @@ projects = {
         role     = "member"
       },
       {
-        username = "egeren"
+        username = "slymanmrcan"
+        role     = "member"
+      },
+      {
+        username = "barisbutun"
         role     = "member"
       }
     ]
   }
 
-  "project-gamma" = {
-    lead            = "egeren"
-    team_permission = "triage"
+  "project-test" = {
+    lead            = "karalarmehmet"
+    team_permission = "push"
     repositories = [
       {
         name        = "general-docs"
