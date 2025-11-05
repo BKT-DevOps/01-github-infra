@@ -7,7 +7,7 @@ github_organization = "BKT-DevOps"
 # ⚠️ Güvenlik Notu:
 # Bu değer .env dosyasında ya da Terraform Cloud ortam değişkeninde saklanmalıdır.
 # Aşağıdaki satır sadece development/test ortamında örnek içindir.
-github_token        = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+github_token = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # =============================
 # PROJECTS CONFIGURATION
