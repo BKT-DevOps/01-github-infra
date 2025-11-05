@@ -1,3 +1,10 @@
+[![Terraform Plan](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml/badge.svg?branch=develop)](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml)
+<img width="1536" height="1024" alt="team_logo" src="https://github.com/user-attachments/assets/f59340f1-9ecd-4ead-9091-bc853bc50924" />
+
+<details open>
+<summary><strong>🇹🇷 Türkçe</strong></summary>
+
+<br>
 
 
 # GitHub Organizasyonları için Terraform ile Repo, Takım ve Kullanıcı Yönetimi Projesi
@@ -31,7 +38,6 @@ Organizasyon
   ├── gamma-docs (repo)
   └── Üyeler: grace (lider), henry
 ```
-
 
 # Özellikler
 
@@ -243,8 +249,11 @@ PR açabilir ve issue oluşturabilirsiniz.
 
 
 Bu proje MIT Lisansı ile lisanslanmıştır - detaylar için LICENSE dosyasına bakınız.
+</details>
+<details>
+<summary><strong>🇬🇧 English</strong></summary>
 
----
+<br>
 
 # GitHub Organization Management via Terraform
 
@@ -438,8 +447,81 @@ projects = {
   }
 }
 ```
+</details>
 
-## Troubleshooting
+<details>
+<summary><strong>Hızlı Başlangıç</strong></summary>
+<br>
+
+## Hızlı Başlangıç (Quick Start)
+Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için aşağıdaki adımları izleyin.
+
+### Ön Gereksinimler (Prerequisites)
+
+1.  **Terraform:** Bilgisayarınızda `1.x.x` veya üzeri bir Terraform versiyonu kurulu olmalıdır. [Terraform Kurulum Rehberi](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+2.  **GitHub Kişisel Erişim Anahtarı (Personal Access Token):** GitHub organizasyonunuzda değişiklik yapma yetkisine sahip bir PAT oluşturmanız gerekir.
+    -   Token'ı [bu linkten](https://github.com/settings/tokens/new) oluşturabilirsiniz.
+    -   Token'a mutlaka **`admin:org`** yetkisini verin.
+    -   Oluşturduğunuz token'ı güvenli bir yere kaydedin, bir daha göremeyeceksiniz.
+
+### Kurulum ve Çalıştırma
+
+1.  **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/organizasyon/proje-adi.git
+    cd proje-adi
+    ```
+2.  **Konfigürasyon Dosyasını Hazırlayın:**
+    `terraform.tfvars.example` dosyasını kopyalayarak `terraform.tfvars` adında yeni bir dosya oluşturun ve kendi bilgilerinizle doldurun.
+    ```hcl
+    # terraform.tfvars
+
+    github_organization = "sizin-github-org-adiniz"
+    github_token        = "BURAYA_PAT_TOKENINIZI_YAPISTIRIN"
+
+    projects = {
+      "proje-alpha" = {
+        lead            = "proje-lideri-kullanici-adi"
+        team_permission = "push"
+        # ... diğer proje ayarları ...
+      }
+    }
+    ```
+    **ÖNEMLİ:** `terraform.tfvars` dosyasını asla Git'e göndermeyin! `.gitignore` dosyanızda `*.tfvars` satırının olduğundan emin olun.
+
+3.  **Terraform'u Başlatın:**
+    Bu komut, gerekli GitHub provider'ını indirir.
+    ```bash
+    terraform init
+    ```
+
+4.  **Değişiklikleri Planlayın:**
+    Bu komut, GitHub üzerinde ne gibi değişiklikler (repo oluşturma, takım ekleme vb.) yapılacağını size gösterir ama henüz bir şey yapmaz.
+    ```bash
+    terraform plan
+    ```
+
+5.  **Değişiklikleri Uygulayın:**
+    Planı kontrol edip her şeyin doğru olduğundan emin olduktan sonra, değişiklikleri uygulamak için bu komutu çalıştırın.
+    ```bash
+    terraform apply
+    ```
+<summary>🚨 <strong>Tehlike Bölgesi (Danger Zone)</strong></summary>
+
+<p>Aşağıdaki komut, bu Terraform konfigürasyonu tarafından yönetilen <strong>tüm kaynakları kalıcı olarak yok edecektir.</strong> Bu, GitHub organizasyonunuzdaki repoları, takımları ve üyelikleri sileceği anlamına gelir.</p>
+
+<p><strong>Bu işlemi yapmadan önce iki kez düşünün. Geri alınamaz.</strong></p>
+
+<h4>Tüm Kaynakları Yok Et</h4>
+<p>Her şeyi silmek için aşağıdaki komutu çalıştırın ve sizden onay istendiğinde <code>yes</code> yazın.</p>
+
+```bash
+# DİKKAT: Bu komut, yönetilen tüm kaynakları kalıcı olarak silecektir.
+terraform destroy
+```
+</details>
+<details>
+<summary><strong>Çözümleme (Troubleshooting)</strong></summary>
 
 ### Common Issues
 
@@ -448,6 +530,10 @@ projects = {
 3. **Repository Exists**: Repository names must be unique in the organization
 4. **Team Name Conflicts**: Team names must be unique in the organization
 
+</details>
+<details>
+<summary><strong>Güvenlik Dikkatleri (Security Considerations)</strong></summary>
+
 ## Security Considerations
 
 1. **Token Security**: Never commit GitHub tokens to version control
@@ -455,10 +541,13 @@ projects = {
 3. **Access Control**: Regularly review team memberships and permissions
 4. **Audit Logging**: Monitor GitHub audit logs for unauthorized changes
 
-## Contributing
+</details>
+<details>
+<summary><strong>Katkıda Bulunma (Contributing)</strong></summary>
 
 Please feel free to raise a PR and create issue.
-
-## License
+</details>
+<details>
+<summary><strong>Lisans (License)</strong></summary>
 
 This project is licensed under the MIT License - see the LICENSE file for details.
