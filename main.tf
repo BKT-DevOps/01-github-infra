@@ -451,6 +451,11 @@ resource "github_repository_file" "report_abuse_template" {
   commit_message = "Add report-abuse issue template"
   overwrite_on_create = true
   depends_on = [github_repository.repo]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
 # Create default pull request template
 resource "github_repository_file" "pr_template" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
