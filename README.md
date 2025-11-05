@@ -1,4 +1,4 @@
-
+[![Terraform Plan](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml/badge.svg?branch=develop)](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml)
 <img width="1536" height="1024" alt="team_logo" src="https://github.com/user-attachments/assets/f59340f1-9ecd-4ead-9091-bc853bc50924" />
 
 <details open>
