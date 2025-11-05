@@ -48,6 +48,7 @@ projects = {
         name        = "to-do-web"
         description = "Web interface for Project To-Do"
         visibility  = "public"
+        license = "Apache-2.0"
       }
     ]
     members = [
