@@ -1,5 +1,18 @@
 [![Terraform Plan](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml/badge.svg?branch=develop)](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml)
 <img width="1536" height="1024" alt="team_logo" src="https://github.com/user-attachments/assets/f59340f1-9ecd-4ead-9091-bc853bc50924" />
+# Terraform ve GitHub Actions İş Akışı ile GitHub Depolarını Yönetin
+
+Bu proje, herhangi bir kuruluş için Terraform aracılığıyla GitHub depo altyapısını yönetir ve **herhangi bir kuruluşu kolaylaştırmak** ve **kurulum karmaşıklığını ortadan kaldırmak** için tasarlanmıştır.
+
+**Organizatörler için:** Bu çözüm, organizatörlerin **standartlaştırılmış yapılandırmalara göre gerekli sayıda depoyu kolayca oluşturmalarını sağlayarak**, tüm ekiplerin/projelerin aynı kurulum ve güvenlik politikalarıyla başlamasını garanti eder. Depoları tek tek manuel olarak oluşturup yapılandırmak yerine, organizatörler tek bir birleştirme işlemiyle tüm altyapıyı ana dala dağıtabilirler.
+
+**Ekipler ve Katılımcılar için:** Ekip üyeleri ve liderleri, zaman alan GitHub yapılandırmaları, depo kurulumu ve erişim yönetimi için değerli zamanlarını harcamak yerine, **tamamen geliştirme görevlerine odaklanabilirler**. Tüm projeler aynı temel yapılandırmayı kullanır, böylece **standart ve tutarlı geliştirme ortamları** sağlanır.
+
+**Gelecekteki Organizasyonlar İçin: Bu proje, gelecekteki projeler veya etkinlikler için yeniden kullanılabilir bir şablon ve referans** görevi görür, organizatörlerin farklı proje formatları, ekip boyutları ve gereksinimler için altyapıyı hızlı bir şekilde uyarlayıp dağıtmasına olanak tanır.
+
+Sistem, otomatik GitHub Actions iş akışları aracılığıyla uygun güvenlik kontrolleri, dal koruma kuralları ve kullanıcı erişim yönetimi ile birden fazla ekip depolama alanı oluşturur ve yapılandırır.
+
+# Manage GitHub Repositories via Terraform and GitHub Actions Workflow
 
 <details open>
 <summary><strong>🇹🇷 Türkçe</strong></summary>
