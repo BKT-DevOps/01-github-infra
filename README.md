@@ -1,3 +1,5 @@
+[![Terraform Plan](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml/badge.svg?branch=develop)](https://github.com/BKT-DevOps/01-github-infra/actions/workflows/terraform-plan.yaml)
+<img width="1536" height="1024" alt="team_logo" src="https://github.com/user-attachments/assets/f59340f1-9ecd-4ead-9091-bc853bc50924" />
 # Terraform ve GitHub Actions İş Akışı ile GitHub Depolarını Yönetin
 
 Bu proje, herhangi bir kuruluş için Terraform aracılığıyla GitHub depo altyapısını yönetir ve **herhangi bir kuruluşu kolaylaştırmak** ve **kurulum karmaşıklığını ortadan kaldırmak** için tasarlanmıştır.
@@ -12,584 +14,553 @@ Sistem, otomatik GitHub Actions iş akışları aracılığıyla uygun güvenlik
 
 # Manage GitHub Repositories via Terraform and GitHub Actions Workflow
 
-This project manages GitHub repositories infrastructure via Terraform for any organization, designed to **streamline any organization** and **eliminate setup complexity**. 
+<details open>
+<summary><strong>🇹🇷 Türkçe</strong></summary>
 
-**For Organizers**: This solution enables organizers to **easily create any required number of repositories** following **standardized configurations**, ensuring all teams/projects start with identical setups and security policies. Instead of manually creating and configuring repositories one by one, organizers can deploy entire infrastructure with a single merge to main branch.
-
-**For Teams and Participants**: Team members and leaders can **focus entirely on their development tasks** rather than spending valuable time on time-consuming GitHub configurations, repository setup, and access management. All projects use the same baseline configuration, ensuring **standardised** and **consistent development environments**.
-
-**For Future Organizations**: This project serves as a **reusable template and reference** for future projects or events, allowing organizers to quickly adapt and deploy infrastructure for different project formats, team sizes, and requirements.
-
-The system creates and configures multiple team repositories with proper security controls, branch protection rules, and user access management through automated GitHub Actions workflows.
-
-## Project Overview
-
-This Terraform configuration manages:
-- 5 GitHub repositories (team-1, team-2, team-3, team-4, team-5)
-- User access management for each repository
-- Branch protection rules for main, release, and develop branches
-- Team lead approval requirements
-- Security configurations
-- **Automated deployment via GitHub Actions workflow**
-
-## Automated Infrastructure Management
-
-This repository uses **GitHub Actions** to automatically apply Terraform changes when code is merged to the main branch. The workflow provides:
-
-- **Zero-touch deployment**: Changes are automatically applied without manual intervention
-- **Pull Request workflow**: Create PRs for infrastructure changes, review, and merge
-- **Automatic Terraform execution**: Workflow triggers on main branch merges
-- **State management**: Terraform state is securely managed in the workflow
-- **Multi-team support**: Single workflow manages all team repositories
-
-## Test Stage - PR Protection
-
-For enhanced safety and validation, this project implements **Terraform plan workflows** that run on every Pull Request against `dev`, `release`, and `main` branches:
-
-### PR Validation Workflow
-- **Terraform Plan**: Automatically runs `terraform plan` on every PR
-- **Status Checks**: Branch protection requires successful plan validation
-- **Merge Protection**: Failed plans prevent PR merging
-- **Early Detection**: Catch configuration errors before they reach main branches
-
-### Branch Protection Integration
-Each protected branch (`main`, `release`, `develop`) requires:
-- ✅ **Terraform Plan Success**: Plan must complete without errors
-- ✅ **Code Review Approval**: Human review still required
-- ✅ **Status Check Passing**: All automated checks must pass
-- ❌ **Merge Blocking**: Failed plans automatically block merge
-
-### Workflow Triggers
-```yaml
-on:
-  pull_request:
-    branches: [ main, release, develop ]
-    paths:
-      - '**.tf'
-      - '**.tfvars'
-      - '.github/workflows/terraform-*.yml'
-```
-
-### Test Stage Benefits
-- **Prevent Broken Infrastructure**: Catch errors before deployment
-- **Faster Feedback**: Immediate validation on PR creation
-- **Reduced Risk**: No surprises when merging to main
-- **Documentation**: Plan output shows exactly what will change
-- **Compliance**: Ensures all changes follow Terraform best practices
+<br>
 
 
-## Repository Structure
+# GitHub Organizasyonları için Terraform ile Repo, Takım ve Kullanıcı Yönetimi Projesi
 
-Each team repository includes:
-- **5 team members** with push access
-- **1 team leader** with admin access and approval privileges
-- **3 protected branches**: main, release, develop
-- **Branch protection rules** requiring PR reviews
-- **Security configurations** for the contest environment
+Bu Terraform konfigürasyonu, proje yönetimi için takım tabanlı bir yapıyla GitHub organizasyonunu yönetir. Kamuya açık topluluklar için tasarlanmıştır; projeler özel takımlar ve repolar ile organize edilir.
 
-## Branch Protection Strategy
 
-### Main Branch
-- Requires team leader approval
-- Dismiss stale reviews when new commits are pushed
-- **Require status checks to pass**: `Terraform Plan` must succeed
-- Restrict pushes to admins only
-- **Merge blocked on failed tests**: PRs cannot merge if Terraform plan fails
+## Mimari Genel Bakış
 
-### Release Branch
-- Requires one approval from any team member
-- Dismiss stale reviews when new commits are pushed
-- **Require status checks to pass**: `Terraform Plan` must succeed
-- Allow force pushes by admins
-- **Merge blocked on failed tests**: PRs cannot merge if Terraform plan fails
+### Temel Kavramlar
 
-### Develop Branch
-- Requires one approval from any team member
-- **Require status checks to pass**: `Terraform Plan` must succeed
-- Less restrictive for development workflow
-- **Merge blocked on failed tests**: PRs cannot merge if Terraform plan fails
+- **Her Proje için Bir Takım**: Her proje için ayrı bir GitHub takımı oluşturulur.
+- **Takım Tabanlı Erişim**: Takımlar, proje repolarına uygun izinlerle atanır.
+- **Proje Liderleri**: Her projenin, tüm proje repolarına admin erişimi olan bir lideri vardır.
+- **Branch Koruması**: Main branch korumalıdır ve proje lideri onayı gerektirir.
+- **CODEOWNERS**: Proje liderlerinin değişiklikleri onaylamasını sağlamak için otomatik olarak oluşturulur.
 
-### Status Check Configuration
 
-To enable the PR protection, configure these required status checks in each branch protection rule:
+### Yapı
 
 ```
-Required status checks:
-- Terraform Plan ✅
-- (other CI checks as needed)
-
-Status check settings:
-✅ Require status checks to pass before merging
-✅ Require branches to be up to date before merging
+Organizasyon
+├── Proje Alpha (Takım)
+│   ├── alpha-api (repo)
+│   ├── alpha-web (repo)
+│   └── Üyeler: alice (lider), bob, charlie
+├── Proje Beta (Takım)
+│   ├── beta-service (repo)
+│   └── Üyeler: diana (lider), eve, frank
+└── Proje Gamma (Takım)
+  ├── gamma-docs (repo)
+  └── Üyeler: grace (lider), henry
 ```
 
+# Özellikler
+
+- ✅ **Takım Yönetimi**: Her proje için otomatik takım oluşturma.
+- ✅ **Branch Otomasyonu**: Her yeni projede otomatik olarak `main`, `release`, `develop` branch'ları açılır.
+- ✅ **Repo Yönetimi**: Proje başına birden fazla repo desteği.
+- ✅ **Erişim Kontrolü**: Rol tabanlı izinler (lider = admin, üyeler = push/triage).
+- ✅ **Branch Koruması**: Main branch için koruma ve onay gereksinimi.
+- ✅ **Dokümantasyon**: Otomatik proje ve takım dokümantasyonu.
+- ✅ **Issue Yönetimi**: Etiketli ilk kurulum issue'u.
+
+- ✅ **CODEOWNERS**: Kod inceleme gereksinimi için otomatik dosya oluşturma (isteğe bağlı).
+- ✅ **Esnek Roller**: Proje bazında farklı izin seviyeleri.
+- ✅ **Çoklu Proje Desteği**: Kullanıcılar birden fazla projede farklı rollerle yer alabilir.
+
+## Dokümantasyon
 
 
-## Two-Stage Security Deployment
+Her repoda bir `docs/` klasörü oluşturulur. Bu klasör örnek dokümantasyonu içerir. Takım liderleri ve üyeleri bu örnek belgelerden yararlanarak kendi özgün belgelerini oluşturabilirler.
 
-For enhanced security, this project implements a **two-stage deployment approach** transitioning from PAT tokens to deploy keys:
 
-### Stage 1: Initial Repository Creation (PAT Token)
-1. **Repository Creation**: Use PAT token to create all team repositories via Terraform
-2. **Initial Configuration**: Set up basic repository settings, branch protection, and user access
-3. **Foundation Setup**: Establish the infrastructure baseline for all teams
+## Konfigürasyon Referansı
 
-### Stage 2: Enhanced Security (Deploy Keys)
-1. **PAT Token Removal**: Remove PAT token from repository secrets for security
-2. **Deploy Key Generation**: Manually create individual deploy keys for each team repository
-3. **Public Key Storage**: Store public keys for each repository in this management repo
-4. **Secure Workflow**: Configure GitHub Actions to use repository-specific deploy keys
+### Proje Konfigürasyonu
 
-### Security Benefits
-- **Reduced Attack Surface**: No single PAT token with broad permissions
-- **Repository Isolation**: Each team repository has its own dedicated deploy key
-- **Granular Access**: Deploy keys provide write access only to specific repositories
-- **Key Rotation**: Individual keys can be rotated without affecting other repositories
-- **Audit Trail**: Each repository access is individually trackable
 
-```
+Her proje için `projects` haritasında aşağıdaki alanlar desteklenir:
 
-## Usage Instructions
+| Alan | Tip | Açıklama | Seçenekler |
+|------|-----|----------|------------|
+| `lead` | string | Proje liderinin GitHub kullanıcı adı | Geçerli bir GitHub kullanıcı adı |
+| `team_permission` | string | Takım üyeleri için temel izin | `pull`, `triage`, `push`, `maintain` |
+| `repositories` | list | Proje için repo listesi | Repo Konfigürasyonu |
+| `members` | list | Takım üyeleri listesi | Üye Konfigürasyonu |
 
-### Prerequisites
-1. GitHub repository with Actions enabled
-2. Access to the target GitHub organization
-3. **No local Terraform installation required** - everything runs in GitHub Actions
-4. SSH key generation tools (for deploy keys)
+### Repo Konfigürasyonu
 
-## Stage 1: Initial Setup with PAT Token
+| Alan | Tip | Açıklama | Seçenekler |
+|------|-----|----------|------------|
+| `name` | string | Repo adı | Geçerli bir repo adı |
+| `description` | string | Repo açıklaması | Herhangi bir metin |
+| `visibility` | string | Repo görünürlüğü | `public`, `private` |
+| `create_codeowners` | bool | CODEOWNERS dosyası oluşturulsun mu | `true`, `false` |
 
-### 1.1 Repository Secrets Configuration (Initial)
-   
-Configure the following secrets in your GitHub repository settings:
-```
-GITHUB_TOKEN          # GitHub PAT with repo and org permissions
-GITHUB_ORGANIZATION   # Your GitHub organization name
-TF_VAR_github_token   # Same as GITHUB_TOKEN for Terraform
-```
+### Üye Konfigürasyonu
 
-### 1.2 Team Configuration Files
-   
-Create team-specific variable files (e.g., `team-1.tfvars`, `team-2.tfvars`):
+| Alan | Tip | Açıklama | Seçenekler |
+|------|-----|----------|------------|
+| `username` | string | GitHub kullanıcı adı | Geçerli bir GitHub kullanıcı adı |
+| `role` | string | Takım rolü | `member`, `maintainer` |
+
+## İzin Matrisi
+
+| Rol | Repo Erişimi | Takım Yönetimi | Branch Koruması |
+|-----|--------------|---------------|-----------------|
+| **Proje Lideri** | Admin | Takımı yönetebilir | Korumayı aşabilir (konfigüre edilebilir) |
+| **Takım Sorumlusu** | `team_permission`'a göre | Üye ekleyip çıkarabilir | Korumaya tabidir |
+| **Takım Üyesi** | `team_permission`'a göre | Takımı yönetemez | Korumaya tabidir |
+
+## Branch Koruma Kuralları
+
+Tüm repolarda `main` branch otomatik olarak aşağıdaki kurallarla korunur:
+
+
+- ✅ Pull request incelemesi gereklidir (en az 1 onay).
+- ✅ Kod sahibi incelemesi gereklidir (CODEOWNERS ile).
+- ✅ Yeni commit geldiğinde eski onaylar iptal edilir.
+- ✅ Durum kontrolleri güncel olmalıdır.
+- ❌ Adminler için kısıtlamalar esnek olması için devre dışı.
+
+## En İyi Uygulamalar
+
+
+### 1. Takım İzinleri
+
+- Sadece dokümantasyon projeleri için `triage` kullanın.
+- Aktif geliştirme projeleri için `push` kullanın.
+- Daha fazla kontrol gerektiren üst düzey üyeler için `maintain` kullanın.
+
+
+### 2. Proje Yapısı
+
+- İlgili repoları aynı projede tutun.
+- Proje adlarını açıklayıcı ve gerçek projeyi yansıtacak şekilde seçin.
+- Aktif katılım gösteren, net proje liderleri atayın.
+
+
+### 3. Güvenlik
+
+- GitHub kişisel erişim anahtarlarını düzenli olarak değiştirin.
+- Takım izinlerinde en az ayrıcalık ilkesini uygulayın.
+
+
+### 4. Repo Yönetimi
+
+- Açık kaynak topluluk projeleri için public görünürlük kullanın.
+- Repo açıklamalarını net ve bilgilendirici tutun.
+
+## GitHub Actions: Otomatik Terraform Uygulaması
+
+
+Bu projede, ana dalda (main branch) yapılan her değişiklik sonrasında GitHub Actions otomasyonu devreye girer ve Terraform değişiklikleri otomatik olarak uygulanır.
+
+- Herhangi bir pull request ana dala (main) birleştirildiğinde, ilgili Terraform kodu otomatik olarak çalıştırılır ve altyapı güncellenir.
+- Ek bir manuel işlem gerektirmez; değişiklikler doğrudan organizasyon ortamına yansır.
+- Otomasyonun durumu ve çıktıları GitHub Actions sekmesinden takip edilebilir.
+- Otomatik uygulama sayesinde altyapı değişiklikleri hızlı, güvenli ve izlenebilir şekilde yönetilir. Tüm değişiklikler için kod incelemesi ve onay mekanizması (CODEOWNERS, branch protection) devrededir.
+
+---
+
+## İleri Seviye Kullanım
+
+### Yeni Proje Ekleme
+
+
+1. `terraform.tfvars` dosyanıza projeyi ekleyin:
+
+
 ```hcl
-# team-1.tfvars
-team_number = 1
-team_leader = "team1-leader-username"
-team_members = [
-  "team1-member1",
-  "team1-member2", 
-  "team1-member3",
-  "team1-member4",
-  "team1-member5"
-]
+projects = {
+
+  ...mevcut projeler...
+  "yeni-proje" = {
+    lead            = "yeni-lider-kullanici"
+    team_permission = "push"
+    repositories = [
+      {
+        name              = "yeni-proje-repo" # repo ismi
+        description       = "Yeni proje için repo" # repo açıklaması
+        visibility        = "public" # repo görünürlüğü
+        create_codeowners = true
+      }
+    ]
+    members = [
+      {
+        username = "yeni-lider-kullanici"
+        role     = "maintainer"
+      }
+    ]
+  }
+}
 ```
 
-### 1.3 Initial Deployment
-1. **Create repositories**: Run initial workflow to create all team repositories
-2. **Verify creation**: Ensure all 5 team repositories are created with proper settings
-3. **Test functionality**: Verify branch protection rules and user access
 
-## Stage 2: Transition to Deploy Keys (Enhanced Security)
+2. Geri kalan işlemleri GitHub Actions otomasyonu halleder!
 
-### 2.1 Remove PAT Token
+### Proje Silme
+
+
+⚠️ **Uyarı**: Bu işlem takımları siler, repo erişimini kaldırır ve başka yerde referanslanmayan repoları silebilir.
+
+
+1. Projeyi `terraform.tfvars` dosyasından çıkarın.
+2. Geri kalan işlemleri GitHub Actions otomasyonu halleder!
+
+### Projeler Arası İşbirliği Yönetimi
+
+
+Kullanıcılar birden fazla projede farklı rollerle yer alabilir:
+
+
+```hcl
+  # "alice" proje-alpha'nın lideri, proje-beta'nın üyesi
+  # Aşağıda örnek açıklamalar ile birlikte iki proje tanımı gösterilmiştir:
+projects = {
+  "proje-alpha" = { # "proje-alpha" takım ismi olacaktır
+    lead = "alice" # proje lideri
+    members = [
+      { username = "alice", role = "maintainer" } # üye rolü (maintainer repo yöneticisi, member normal üye)
+    ]
+  }
+  "proje-beta" = { # "proje-beta" takım ismi olacaktır
+    lead = "bob" # proje lideri
+    members = [
+      { username = "bob", role = "maintainer" }, # üye rolü
+      { username = "alice", role = "member" }    # üye rolü
+    ]
+  }
+}
+```
+
+
+## Sorun Giderme
+
+
+### Sık Karşılaşılan Sorunlar
+
+
+1. **İzin Reddedildi**: GitHub token'ınızın `admin:org` yetkisine sahip olduğundan emin olun.
+2. **Kullanıcı Bulunamadı**: Tüm kullanıcı adlarının GitHub'da mevcut olduğundan emin olun.
+3. **Repo Zaten Var**: Repo adları organizasyonda benzersiz olmalıdır.
+4. **Takım Adı Çakışması**: Takım adları organizasyonda benzersiz olmalıdır.
+
+
+## Güvenlik Notları
+
+
+1. **Token Güvenliği**: GitHub token'larını asla versiyon kontrolüne eklemeyin.
+2. **State Dosyası**: Terraform state dosyası hassas bilgi içerebilir - güvenli saklayın.
+3. **Erişim Kontrolü**: Takım üyeliklerini ve izinleri düzenli olarak gözden geçirin.
+4. **Denetim Logları**: Yetkisiz değişiklikler için GitHub denetim loglarını izleyin.
+
+## Katkı
+
+
+PR açabilir ve issue oluşturabilirsiniz.
+
+## Lisans
+
+
+Bu proje MIT Lisansı ile lisanslanmıştır - detaylar için LICENSE dosyasına bakınız.
+</details>
+<details>
+<summary><strong>🇬🇧 English</strong></summary>
+
+<br>
+
+# GitHub Organization Management via Terraform
+
+This Terraform configuration manages a GitHub organization with a team-based structure for project management. It's designed for public communities where projects are organized with dedicated teams and repositories.
+
+## Architecture Overview
+
+### Core Concepts
+
+- **One Team per Project**: Each project gets its own GitHub team
+- **Team-based Access**: Teams are assigned to project repositories with appropriate permissions
+- **Project Leads**: Each project has a designated lead with admin access to all project repositories
+- **Branch Protection**: Main branch is protected and requires code owner approval
+- **CODEOWNERS**: Automatically created to ensure project leads approve changes
+
+### Structure
+
+```
+Organization
+├── Project Alpha (Team)
+│   ├── alpha-api (Repository)
+│   ├── alpha-web (Repository)
+│   └── Members: alice (lead), bob, charlie
+├── Project Beta (Team)
+│   ├── beta-service (Repository)
+│   └── Members: diana (lead), eve, frank
+└── Project Gamma (Team)
+    ├── gamma-docs (Repository)
+    └── Members: grace (lead), henry
+```
+
+# Features
+
+- ✅ **Team Management**: Automatic team creation per project
+- ✅ **Branch Automation**: Each new project automatically creates `main`, `release`, and `develop` branches
+- ✅ **Repository Management**: Multiple repos per project support
+- ✅ **Access Control**: Role-based permissions (lead = admin, members = push/triage)
+- ✅ **Branch Protection**: Main branch protection with required reviews
+- ✅ **Documentation**: Automatic project and team documentation creation
+- ✅ **Issue Management**: Initial setup issue with proper labels
+- ✅ **CODEOWNERS**: Automatic generation for code review requirements (optional)
+- ✅ **Flexible Roles**: Different permission levels per project
+- ✅ **Multi-project Support**: Users can be in multiple projects with different roles
+
+## Documentation
+
+Each repository automatically gets comprehensive documentation in the `docs/` folder and an enhanced README.
+
+## Configuration Reference
+
+### Project Configuration
+
+Each project in the `projects` map supports:
+
+| Field | Type | Description | Options |
+|-------|------|-------------|---------|
+| `lead` | string | GitHub username of project lead | Any valid GitHub username |
+| `team_permission` | string | Base permission for team members | `pull`, `triage`, `push`, `maintain` |
+| `repositories` | list | List of repositories for this project | See Repository Configuration |
+| `members` | list | List of team members | See Member Configuration |
+
+### Repository Configuration
+
+| Field | Type | Description | Options |
+|-------|------|-------------|---------|
+| `name` | string | Repository name | Any valid repository name |
+| `description` | string | Repository description | Any string |
+| `visibility` | string | Repository visibility | `public`, `private` |
+| `create_codeowners` | bool | Whether to create CODEOWNERS file | `true`, `false` |
+
+### Member Configuration
+
+| Field | Type | Description | Options |
+|-------|------|-------------|---------|
+| `username` | string | GitHub username | Any valid GitHub username |
+| `role` | string | Team role | `member`, `maintainer` |
+
+## Permission Matrix
+
+| Role | Repository Access | Team Management | Branch Protection |
+|------|------------------|-----------------|-------------------|
+| **Project Lead** | Admin | Can manage team | Bypass protection (configurable) |
+| **Team Maintainer** | Based on `team_permission` | Can add/remove members | Subject to protection |
+| **Team Member** | Based on `team_permission` | Cannot manage team | Subject to protection |
+
+## Branch Protection Rules
+
+All repositories automatically get branch protection on `main` with:
+
+- ✅ Required pull request reviews (1 approval minimum)
+- ✅ Require code owner reviews (via CODEOWNERS)
+- ✅ Dismiss stale reviews when new commits are pushed
+- ✅ Require status checks to be up to date
+- ❌ Enforce restrictions for administrators (disabled for flexibility)
+
+## Best Practices
+
+### 1. Team Permissions
+
+- Use `triage` for documentation-only projects
+- Use `push` for active development projects
+- Use `maintain` for senior team members who need more control
+
+### 2. Project Structure
+
+- Keep related repositories in the same project
+- Use descriptive project names that reflect the actual project
+- Assign clear project leads who are actively involved
+
+### 3. Security
+
+- Regularly rotate GitHub personal access tokens
+- Use principle of least privilege for team permissions
+
+### 4. Repository Management
+
+- Enable CODEOWNERS for code review requirements
+- Use public visibility for open-source community projects
+- Keep repository descriptions clear and informative
+
+## GitHub Actions: Automatic Terraform Apply
+
+This project uses GitHub Actions automation to apply Terraform changes automatically whenever a change is merged into the `main` branch.
+
+- When a pull request is merged to `main`, GitHub Actions will run and apply the Terraform code automatically.
+- No manual steps are required; infrastructure changes are deployed directly to the cloud/organization environment.
+- You can monitor the automation status and logs in the GitHub Actions tab.
+
+**Note:** This automation ensures infrastructure changes are managed quickly, securely, and in a fully auditable way. All changes are subject to code review and approval mechanisms (CODEOWNERS, branch protection).
+
+---
+
+## Advanced Usage
+
+### Adding a New Project
+
+1. Add the project to your `terraform.tfvars`:
+
+```hcl
+projects = {
+  # ... existing projects ...
+  "new-project" = {
+    lead            = "new-lead-username"
+    team_permission = "push"
+    repositories = [
+      {
+        name              = "new-project-repo"
+        description       = "Repository for new project"
+        visibility        = "public"
+        create_codeowners = true
+      }
+    ]
+    members = [
+      {
+        username = "new-lead-username"
+        role     = "maintainer"
+      }
+    ]
+  }
+}
+```
+
+2. GitHub Actions Automation will do the rest!
+
+### Removing a Project
+
+⚠️ **Warning**: This will delete teams, remove repository access, and potentially delete repositories if they're not referenced elsewhere.
+
+1. Remove the project from `terraform.tfvars`
+2. GitHub Actions Automation will do the rest!
+
+### Managing Cross-Project Collaboration
+
+Users can be members of multiple projects with different roles:
+
+```hcl
+# User "alice" is lead of project-alpha and member of project-beta
+projects = {
+  "project-alpha" = {
+    lead = "alice"
+    members = [
+      { username = "alice", role = "maintainer" }
+    ]
+  }
+  "project-beta" = {
+    lead = "bob"
+    members = [
+      { username = "bob", role = "maintainer" },
+      { username = "alice", role = "member" }
+    ]
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Hızlı Başlangıç</strong></summary>
+<br>
+
+## Hızlı Başlangıç (Quick Start)
+Bu projeyi kullanarak kendi GitHub organizasyonunuzu yönetmeye başlamak için aşağıdaki adımları izleyin.
+
+### Ön Gereksinimler (Prerequisites)
+
+1.  **Terraform:** Bilgisayarınızda `1.x.x` veya üzeri bir Terraform versiyonu kurulu olmalıdır. [Terraform Kurulum Rehberi](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+2.  **GitHub Kişisel Erişim Anahtarı (Personal Access Token):** GitHub organizasyonunuzda değişiklik yapma yetkisine sahip bir PAT oluşturmanız gerekir.
+    -   Token'ı [bu linkten](https://github.com/settings/tokens/new) oluşturabilirsiniz.
+    -   Token'a mutlaka **`admin:org`** yetkisini verin.
+    -   Oluşturduğunuz token'ı güvenli bir yere kaydedin, bir daha göremeyeceksiniz.
+
+### Kurulum ve Çalıştırma
+
+1.  **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/organizasyon/proje-adi.git
+    cd proje-adi
+    ```
+2.  **Konfigürasyon Dosyasını Hazırlayın:**
+    `terraform.tfvars.example` dosyasını kopyalayarak `terraform.tfvars` adında yeni bir dosya oluşturun ve kendi bilgilerinizle doldurun.
+    ```hcl
+    # terraform.tfvars
+
+    github_organization = "sizin-github-org-adiniz"
+    github_token        = "BURAYA_PAT_TOKENINIZI_YAPISTIRIN"
+
+    projects = {
+      "proje-alpha" = {
+        lead            = "proje-lideri-kullanici-adi"
+        team_permission = "push"
+        # ... diğer proje ayarları ...
+      }
+    }
+    ```
+    **ÖNEMLİ:** `terraform.tfvars` dosyasını asla Git'e göndermeyin! `.gitignore` dosyanızda `*.tfvars` satırının olduğundan emin olun.
+
+3.  **Terraform'u Başlatın:**
+    Bu komut, gerekli GitHub provider'ını indirir.
+    ```bash
+    terraform init
+    ```
+
+4.  **Değişiklikleri Planlayın:**
+    Bu komut, GitHub üzerinde ne gibi değişiklikler (repo oluşturma, takım ekleme vb.) yapılacağını size gösterir ama henüz bir şey yapmaz.
+    ```bash
+    terraform plan
+    ```
+
+5.  **Değişiklikleri Uygulayın:**
+    Planı kontrol edip her şeyin doğru olduğundan emin olduktan sonra, değişiklikleri uygulamak için bu komutu çalıştırın.
+    ```bash
+    terraform apply
+    ```
+<summary>🚨 <strong>Tehlike Bölgesi (Danger Zone)</strong></summary>
+
+<p>Aşağıdaki komut, bu Terraform konfigürasyonu tarafından yönetilen <strong>tüm kaynakları kalıcı olarak yok edecektir.</strong> Bu, GitHub organizasyonunuzdaki repoları, takımları ve üyelikleri sileceği anlamına gelir.</p>
+
+<p><strong>Bu işlemi yapmadan önce iki kez düşünün. Geri alınamaz.</strong></p>
+
+<h4>Tüm Kaynakları Yok Et</h4>
+<p>Her şeyi silmek için aşağıdaki komutu çalıştırın ve sizden onay istendiğinde <code>yes</code> yazın.</p>
+
 ```bash
-# Remove these secrets from repository settings:
-# - GITHUB_TOKEN
-# - TF_VAR_github_token
+# DİKKAT: Bu komut, yönetilen tüm kaynakları kalıcı olarak silecektir.
+terraform destroy
 ```
-
-### 2.2 Generate Deploy Keys for Each Repository
-
-For each team repository, generate SSH key pairs:
-
-```bash
-# Generate deploy keys for all teams (one-liner)
-for i in {1..5}; do ssh-keygen -t ed25519 -f ./keys/team-${i}-deploy-key -C "deploy-key-team-${i}" -N ""; done
-```
-
-### 2.3 Configure Deploy Keys in Team Repositories
-
-For each team repository:
-1. **Navigate to repository settings** → Deploy keys
-2. **Add deploy key** with write access
-3. **Paste the public key** content (`.pub` file)
-4. **Enable write access** for the deploy key
-
-### 2.4 Store Private Keys as Repository Secrets
-
-Add the private keys as secrets in this management repository:
-```
-TEAM_1_DEPLOY_KEY     # Content of team-1-deploy-key (private key)
-TEAM_2_DEPLOY_KEY     # Content of team-2-deploy-key (private key)
-TEAM_3_DEPLOY_KEY     # Content of team-3-deploy-key (private key)
-TEAM_4_DEPLOY_KEY     # Content of team-4-deploy-key (private key)
-TEAM_5_DEPLOY_KEY     # Content of team-5-deploy-key (private key)
-GITHUB_ORGANIZATION   # Keep this secret
-```
-
-### 2.5 Store Public Keys in Repository
-
-Create a `deploy-keys/` directory and store public keys:
-```
-deploy-keys/
-├── team-1-deploy-key.pub
-├── team-2-deploy-key.pub
-├── team-3-deploy-key.pub
-├── team-4-deploy-key.pub
-└── team-5-deploy-key.pub
-```
-
-### Making Changes (Automated Workflow)
-
-1. **Create a feature branch**
-   ```bash
-   git checkout -b feature/update-team-1-members
-   ```
-
-2. **Make your infrastructure changes**
-   - Update Terraform configuration files
-   - Modify team member lists in `.tfvars` files
-   - Add new team repositories
-   - Update branch protection rules
-
-3. **Create a Pull Request**
-   ```bash
-   git add .
-   git commit -m "Update team-1 member list"
-   git push origin feature/update-team-1-members
-   ```
-   Then create a PR through GitHub UI
-
-4. **Automated Testing (Test Stage)**
-   - **Terraform Plan runs automatically** on PR creation
-   - **Plan results posted as PR comment** showing what will change
-   - **Status check must pass** before merge is allowed
-   - **Fix any plan failures** before proceeding
-
-5. **Review and Merge**
-   - Review the proposed changes in the PR
-   - **Check Terraform plan output** in PR comments
-   - Ensure **status checks are green** ✅
-   - **Merge to target branch** (develop/release/main)
-   - **GitHub Actions automatically applies changes** (main branch only)
-   Then create a PR through GitHub UI
-
-4. **Review and Merge**
-   - Review the proposed changes in the PR
-   - Check Terraform plan output (if plan workflow is enabled)
-   - **Merge to main branch**
-   - **GitHub Actions automatically applies changes**
-
-### Workflow Trigger
-
-The GitHub Actions workflow automatically triggers when:
-- Code is **merged to the main branch**
-- **No manual terraform commands needed**
-- **No local setup required**
-- All changes are applied automatically to the target repositories
-
-### GitHub Actions Workflow Example
-
-The workflow automatically manages all team repositories with proper testing on PRs. Here's the complete workflow file (`.github/workflows/terraform.yml`):
-
-```yaml
-name: 'Terraform Infrastructure'
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main, release, develop ]
-    paths:
-      - '**.tf'
-      - '**.tfvars'
-      - '.github/workflows/terraform-*.yml'
-
-jobs:
-  terraform-plan:
-    name: 'Terraform Plan'
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.6.0
-
-    - name: Terraform Init
-      run: terraform init
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Terraform Validate
-      run: terraform validate
-
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan -no-color -detailed-exitcode
-      env:
-        GITHUB_TOKEN: ${{ secrets.TF_VAR_github_token }}
-        TF_VAR_github_organization: ${{ secrets.GITHUB_ORGANIZATION }}
-      continue-on-error: true
-
-    - name: Comment PR with Plan
-      uses: actions/github-script@v7
-      if: github.event_name == 'pull_request'
-      env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-          <details><summary>Show Plan</summary>
-
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
-
-          </details>
-
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-          })
-
-    - name: Check Plan Status
-      if: steps.plan.outcome == 'failure'
-      run: |
-        echo "❌ Terraform plan failed!"
-        echo "This PR cannot be merged until the plan succeeds."
-        exit 1
-
-  terraform-apply:
-    name: 'Terraform Apply'
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.6.0
-
-    - name: Terraform Init
-      run: terraform init
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
-      env:
-        GITHUB_TOKEN: ${{ secrets.TF_VAR_github_token }}
-        TF_VAR_github_organization: ${{ secrets.GITHUB_ORGANIZATION }}
-        TF_VAR_github_organization: ${{ secrets.GITHUB_ORGANIZATION }}
-```
-
-### Managing Multiple Teams
-
-All team repositories are managed through this single workflow:
-
-1. **Single configuration** manages all 5 teams
-2. **Automatic deployment** on main branch merge
-3. **No manual intervention** required
-4. **Centralized management** of all team infrastructure
-
-The workflow will automatically:
-- Create/update repositories for team-1 through team-5
-- Apply user access changes
-- Update branch protection rules
-- Manage security settings
-
-## Security Considerations
-
-- Use environment variables for sensitive data like GitHub tokens
-- Enable branch protection rules before adding team members
-- Regularly review repository access and permissions
-- Consider using GitHub Teams for easier user management
-- Enable security alerts and dependency scanning
-
-## File Structure
-
-```
-├── .github/
-│   └── workflows/
-│       └── terraform.yml        # Main workflow with PR testing
-├── main.tf                      # Main Terraform configuration
-├── variables.tf                 # Variable definitions
-├── outputs.tf                   # Output definitions  
-├── team-1.tfvars               # Team 1 configuration
-├── team-2.tfvars               # Team 2 configuration
-├── team-3.tfvars               # Team 3 configuration
-├── team-4.tfvars               # Team 4 configuration
-├── team-5.tfvars               # Team 5 configuration
-├── templates/
-│   └── team_readme.md          # Template for team repository README
-├── .gitignore                  # Excludes sensitive files, private keys and temp files
-└── README.md                   # This file
-```
-
-
-## Deploy Keys Workflow Example (Stage 2)
-
-Here's an example workflow file for Stage 2 using deploy keys (`.github/workflows/terraform-stage2.yml`):
-
-```yaml
-name: 'Terraform Infrastructure - Deploy Keys'
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  terraform:
-    name: 'Terraform with Deploy Keys'
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup SSH Agent
-      uses: webfactory/ssh-agent@v0.7.0
-      with:
-        ssh-private-key: |
-          ${{ secrets.TEAM_1_DEPLOY_KEY }}
-          ${{ secrets.TEAM_2_DEPLOY_KEY }}
-          ${{ secrets.TEAM_3_DEPLOY_KEY }}
-          ${{ secrets.TEAM_4_DEPLOY_KEY }}
-          ${{ secrets.TEAM_5_DEPLOY_KEY }}
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.6.0
-
-    - name: Configure Git for SSH
-      run: |
-        git config --global url."git@github.com:".insteadOf "https://github.com/"
-
-    - name: Terraform Init
-      run: terraform init
-      env:
-        TF_VAR_github_organization: ${{ secrets.GITHUB_ORGANIZATION }}
-
-    - name: Terraform Plan
-      run: terraform plan -no-color
-      env:
-        TF_VAR_github_organization: ${{ secrets.GITHUB_ORGANIZATION }}
-
-    - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve
-      env:
-        TF_VAR_github_organization: ${{ secrets.GITHUB_ORGANIZATION }}
-```
-
-## Workflow Benefits
-
-### For Administrators
-- **No local setup required** - everything runs in GitHub Actions
-- **Audit trail** - all changes tracked through Git history
-- **Review process** - changes reviewed via Pull Requests
-- **Rollback capability** - easy to revert through Git
-- **Centralized management** - single repository manages all teams
-
-### For Team Management
-- **Easy member updates** - just edit `.tfvars` files and merge
-- **Consistent configuration** - all teams follow same security rules
-- **Automated deployment** - no manual terraform commands
-- **Version controlled** - all infrastructure changes are tracked
-
-### Security Benefits (Stage 2 - Deploy Keys)
-- **Eliminated PAT token exposure** - no broad-access tokens stored
-- **Repository-specific access** - each deploy key works only for its target repo
-- **Reduced blast radius** - compromise of one key doesn't affect other repositories
-- **Granular permissions** - deploy keys have write access only to specific repositories
-- **Key rotation capability** - individual keys can be rotated independently
-- **No user account dependency** - deploy keys work independent of user accounts
-- **Audit isolation** - each repository access is individually logged and trackable
-
-### Migration Benefits
-- **Phased transition** - gradual move from PAT to deploy keys
-- **Zero downtime** - repositories remain functional during transition
-- **Rollback option** - can revert to PAT tokens if needed during migration
-- **Testing capability** - validate deploy key setup before removing PAT tokens
-
-## Contributing
-
-1. **Fork the repository** (if external contributor)
-2. **Create a feature branch** for your changes
-   ```bash
-   git checkout -b feature/description-of-change
-   ```
-3. **Make your infrastructure changes**
-   - Update Terraform configurations
-   - Modify team configurations in `.tfvars` files
-   - Update documentation if needed
-4. **Submit a pull request**
-   - PR will trigger plan workflow (if configured)
-   - Review the planned changes
-   - **Merge to main triggers automatic deployment**
-
-## Troubleshooting
+</details>
+<details>
+<summary><strong>Çözümleme (Troubleshooting)</strong></summary>
 
 ### Common Issues
 
-**Stage 1 Issues (PAT Token):**
-- Verify `GITHUB_TOKEN` secret has correct permissions
-- Ensure token has `repo` and organization access
-- Check token hasn't expired or been revoked
+1. **Permission Denied**: Ensure your GitHub token has `admin:org` scope
+2. **User Not Found**: Verify all usernames exist on GitHub
+3. **Repository Exists**: Repository names must be unique in the organization
+4. **Team Name Conflicts**: Team names must be unique in the organization
 
-**Stage 2 Issues (Deploy Keys):**
-- Verify deploy keys are properly configured in each repository
-- Ensure private keys are correctly stored as repository secrets
-- Check SSH agent setup in GitHub Actions workflow
-- Verify public keys match the private keys stored in secrets
+</details>
+<details>
+<summary><strong>Güvenlik Dikkatleri (Security Considerations)</strong></summary>
 
-**Migration Issues:**
-- **Deploy key not working**: Verify public key was added to correct repository with write permissions
-- **SSH connection failed**: Check if private key format is correct (OpenSSH format)
-- **Authentication failed**: Ensure git is configured to use SSH instead of HTTPS
+## Security Considerations
 
-**Terraform state conflicts:**
-- Use Terraform remote state (S3, Terraform Cloud, etc.)
-- Configure state locking to prevent concurrent runs
+1. **Token Security**: Never commit GitHub tokens to version control
+2. **State File**: Terraform state may contain sensitive information - store securely
+3. **Access Control**: Regularly review team memberships and permissions
+4. **Audit Logging**: Monitor GitHub audit logs for unauthorized changes
 
-**Team member not added:**
-- Verify GitHub username exists and is correct
-- Check if user has enabled organization membership visibility
+</details>
+<details>
+<summary><strong>Katkıda Bulunma (Contributing)</strong></summary>
 
-### Migration Checklist
+Please feel free to raise a PR and create issue.
+</details>
+<details>
+<summary><strong>Lisans (License)</strong></summary>
 
-**Before removing PAT token:**
-1. ✅ All deploy keys generated and stored
-2. ✅ Public keys added to each team repository with write access
-3. ✅ Private keys stored as repository secrets
-4. ✅ Stage 2 workflow tested successfully
-5. ✅ Terraform plan/apply works with deploy keys
-
-**Deploy Key Validation:**
-```bash
-# Test deploy key access for team-1
-ssh -T -i ./keys/team-1-deploy-key git@github.com
-
-# Should return: "Hi [org]/team-1! You've successfully authenticated..."
-```
-
-## License
-
-This project is licensed under the Apache 2.0  License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
