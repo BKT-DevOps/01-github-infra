@@ -115,7 +115,8 @@ resource "github_branch_protection" "main" {
     github_repository_file.readme,
     github_repository_file.codeowners,
     github_repository_file.docs_architecture,
-    github_repository_file.docs_workflow
+    github_repository_file.docs_workflow,
+    github_repository_file.pr_template
   ]
 }
 
@@ -404,4 +405,24 @@ locals {
       }
     ]
   ])
+}
+
+# Create default pull request template
+resource "github_repository_file" "pr_template" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  file           = ".github/pull_request_template.md"
+  content        = file("${path.module}/sample_repo_docs/pull_request_template.md")
+  commit_message = "Add default PR template"
+
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo
+  ]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
 }
