@@ -18,6 +18,7 @@ variable "projects" {
       name        = string
       description = string
       visibility  = string
+      license     = optional(string)
     }))
     members = list(object({
       username = string

@@ -19,12 +19,16 @@ resource "github_repository" "repo" {
   description = each.value.description
   visibility  = each.value.visibility
 
-  has_issues   = true
-  has_wiki     = true
-  has_projects = true
+  has_issues      = true
+  has_wiki        = true
+  has_projects    = true
+  has_discussions = true
 
   delete_branch_on_merge = true
   auto_init              = true
+
+  # Optional License
+  license_template = each.value.license
 
   # Enable branch protection
   allow_merge_commit = true
@@ -112,7 +116,8 @@ resource "github_branch_protection" "main" {
     github_repository_file.readme,
     github_repository_file.codeowners,
     github_repository_file.docs_architecture,
-    github_repository_file.docs_workflow
+    github_repository_file.docs_workflow,
+    github_repository_file.pr_template
   ]
 }
 
@@ -333,6 +338,26 @@ resource "github_repository_file" "readme" {
   }
 }
 
+# --- Code of Conduct dosyasını her repoya ekle ---
+resource "github_repository_file" "code_of_conduct" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  branch         = "main"
+  file           = "CODE_OF_CONDUCT.md"
+  content        = file("${path.module}/sample_repo_docs/CODE_OF_CONDUCT.md")
+  commit_message = "Add CODE_OF_CONDUCT.md file"
+
+  overwrite_on_create = true
+
+  depends_on = [github_repository.repo]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
+
 # Opsiyonel: Wiki sayfaları
 resource "github_repository_file" "wiki_home" {
   for_each = { for repo in local.all_repos : repo.repo_name => repo }
@@ -386,6 +411,7 @@ locals {
         visibility      = repo.visibility
         lead            = project.lead
         team_permission = project.team_permission
+        license         = try(repo.license, "mit")
       }
     ]
   ])
@@ -400,4 +426,52 @@ locals {
       }
     ]
   ])
+}
+
+# --- Raporlamayı etkinleştirmek için sorun şablonu yapılandırmasını ekle ---
+resource "github_repository_file" "issue_template_config" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository          = github_repository.repo[each.key].name
+  branch              = "main"
+  file                = ".github/ISSUE_TEMPLATE/config.yml"
+  content             = file("${path.module}/sample_repo_docs/config.yml")
+  commit_message      = "Add issue template config for reporting"
+  overwrite_on_create = true
+  depends_on          = [github_repository.repo]
+}
+
+resource "github_repository_file" "report_abuse_template" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository          = github_repository.repo[each.key].name
+  branch              = "main"
+  file                = ".github/ISSUE_TEMPLATE/report-abuse.yml"
+  content             = file("${path.module}/sample_repo_docs/report-abuse.yml")
+  commit_message      = "Add report-abuse issue template"
+  overwrite_on_create = true
+  depends_on          = [github_repository.repo]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+# Create default pull request template
+resource "github_repository_file" "pr_template" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository     = github_repository.repo[each.key].name
+  file           = ".github/pull_request_template.md"
+  content        = file("${path.module}/sample_repo_docs/pull_request_template.md")
+  commit_message = "Add default PR template"
+
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo
+  ]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
 }
