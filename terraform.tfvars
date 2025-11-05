@@ -34,94 +34,94 @@ github_organization = "BKT-DevOps"
 
 # Projects Configuration
 projects = {
-  # "InfraCoders" = {
-  #   lead            = "flovearth"
-  #   team_permission = "push"
-  #   repositories = [
-  #     {
-  #       name        = "project-terraform-github"
-  #       description = "Terraform ile GitHub Repolarının Otomatik yönetimi"
-  #       visibility  = "public"
-  #     },
+  "InfraCoders" = {
+    lead            = "flovearth"
+    team_permission = "push"
+    repositories = [
+      {
+        name        = "project-terraform-github"
+        description = "Terraform ile GitHub Repolarının Otomatik yönetimi"
+        visibility  = "public"
+      },
 
-  #   ]
-  #   members = [
-  #     {
-  #       username = "barisbutun"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "hakanceran64"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "hulyaoner"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "ismailaricioglu"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "karalarmehmet"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "kheif"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "purfatih"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "seyid12"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "Shamsiaa"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "slymanmrcan"
-  #       role     = "member"
-  #     }
-  #   ]
-  # }
+    ]
+    members = [
+      {
+        username = "barisbutun"
+        role     = "member"
+      },
+      {
+        username = "hakanceran64"
+        role     = "member"
+      },
+      {
+        username = "hulyaoner"
+        role     = "member"
+      },
+      {
+        username = "ismailaricioglu"
+        role     = "member"
+      },
+      {
+        username = "karalarmehmet"
+        role     = "member"
+      },
+      {
+        username = "kheif"
+        role     = "member"
+      },
+      {
+        username = "purfatih"
+        role     = "member"
+      },
+      {
+        username = "seyid12"
+        role     = "member"
+      },
+      {
+        username = "Shamsiaa"
+        role     = "member"
+      },
+      {
+        username = "slymanmrcan"
+        role     = "member"
+      }
+    ]
+  }
 
-  # "kovan" = {
-  #   lead            = "hakanceran64"
-  #   team_permission = "push"
-  #   repositories = [
-  #     {
-  #       name        = "communication-service"
-  #       description = "Core service for Project Communication"
-  #       visibility  = "public"
-  #     }
-  #   ]
-  #   members = [
-  #     {
-  #       username = "flovearth"
-  #       role     = "maintainer"
-  #     },
-  #     {
-  #       username = "ismailaricioglu"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "hulyaoner"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "slymanmrcan"
-  #       role     = "member"
-  #     },
-  #     {
-  #       username = "barisbutun"
-  #       role     = "member"
-  #     }
-  #   ]
-  # }
+  "kovan" = {
+    lead            = "hakanceran64"
+    team_permission = "push"
+    repositories = [
+      {
+        name        = "communication-service"
+        description = "Core service for Project Communication"
+        visibility  = "public"
+      }
+    ]
+    members = [
+      {
+        username = "flovearth"
+        role     = "maintainer"
+      },
+      {
+        username = "ismailaricioglu"
+        role     = "member"
+      },
+      {
+        username = "hulyaoner"
+        role     = "member"
+      },
+      {
+        username = "slymanmrcan"
+        role     = "member"
+      },
+      {
+        username = "barisbutun"
+        role     = "member"
+      }
+    ]
+  }
 
   "project-test" = {
     lead            = "ismailaricioglu"
