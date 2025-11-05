@@ -1,207 +1,350 @@
-# 🔐 Verified Commits Guide | Doğrulanmış Commit Rehberi
+# 🔐 Verified Commits Kurulum Rehberi
 
-<details open>
-<summary><strong>🇹🇷 Türkçe</strong></summary>
+## 📖 İçindekiler
 
-<br>
-
-## Verified Commit Nedir?
-
-Verified commit, GitHub'da commit'lerin gerçekten belirtilen kullanıcı tarafından yapıldığını doğrulayan bir güvenlik özelliğidir. GPG anahtarı ile imzalanmış commit'ler GitHub'da yeşil "Verified" rozeti ile görünür.
-
-## Neden Önemli?
-
-- ✅ **Güvenlik**: Commit'lerin gerçek sahibini doğrular
-- ✅ **Güven**: Takım içinde güvenilirlik sağlar
-- ✅ **Compliance**: Kurumsal güvenlik standartlarını karşılar
-- ✅ **Audit**: Değişikliklerin takibini kolaylaştırır
-
-## Kurulum Adımları
-
-### 1. GPG Anahtarı Oluşturma
-
-```bash
-# GPG yüklü mü kontrol et
-gpg --version
-
-# Yeni GPG anahtarı oluştur
-gpg --full-generate-key
-
-# RSA seç ve 4096 bit boyutu kullan
-# Email adresini GitHub hesabındaki ile aynı yap
-```
-
-### 2. GPG Anahtarını GitHub'a Ekleme
-
-```bash
-# GPG anahtarlarını listele
-gpg --list-secret-keys --keyid-format=long
-
-# Public key'i export et
-gpg --armor --export YOUR_KEY_ID
-
-# Bu çıktıyı GitHub Settings > SSH and GPG keys > New GPG key'e ekle
-```
-
-### 3. Git Konfigürasyonu
-
-```bash
-# Global olarak GPG signing'i aktif et
-git config --global commit.gpgsign true
-git config --global user.signingkey YOUR_KEY_ID
-
-# GPG program path'ini belirle (macOS için)
-git config --global gpg.program gpg
-```
-
-### 4. Test Et
-
-```bash
-# Test commit yap
-git commit -S -m "Test verified commit"
-
-# Commit'in imzalandığını kontrol et
-git log --show-signature -1
-```
-
-## Sorun Giderme
-
-### GPG Agent Sorunları
-
-```bash
-# GPG agent'ı yeniden başlat
-gpgconf --kill gpg-agent
-gpgconf --launch gpg-agent
-
-# Test et
-echo "test" | gpg --clearsign
-```
-
-### macOS Sorunları
-
-```bash
-# GPG Suite kullan veya pinentry ayarla
-brew install pinentry-mac
-echo "pinentry-program /opt/homebrew/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
-gpgconf --kill gpg-agent
-```
-
-## IDE Entegrasyonu
-
-### VS Code
-1. **GitLens** extension yükle
-2. Settings'de "git.enableCommitSigning": true
-
-### IntelliJ/PyCharm
-1. Settings > Version Control > Git > Sign off commits ✅
-
-</details>
-
-<details>
-<summary><strong>🇬🇧 English</strong></summary>
-
-<br>
-
-## What is a Verified Commit?
-
-A verified commit is a security feature on GitHub that proves commits were actually made by the specified user. Commits signed with a GPG key display a green "Verified" badge on GitHub.
-
-## Why is it Important?
-
-- ✅ **Security**: Verifies the true owner of commits
-- ✅ **Trust**: Provides reliability within the team
-- ✅ **Compliance**: Meets corporate security standards
-- ✅ **Audit**: Facilitates tracking of changes
-
-## Setup Steps
-
-### 1. Generate GPG Key
-
-```bash
-# Check if GPG is installed
-gpg --version
-
-# Generate new GPG key
-gpg --full-generate-key
-
-# Select RSA and use 4096 bit size
-# Use the same email as your GitHub account
-```
-
-### 2. Add GPG Key to GitHub
-
-```bash
-# List GPG keys
-gpg --list-secret-keys --keyid-format=long
-
-# Export public key
-gpg --armor --export YOUR_KEY_ID
-
-# Add this output to GitHub Settings > SSH and GPG keys > New GPG key
-```
-
-### 3. Git Configuration
-
-```bash
-# Enable GPG signing globally
-git config --global commit.gpgsign true
-git config --global user.signingkey YOUR_KEY_ID
-
-# Set GPG program path (for macOS)
-git config --global gpg.program gpg
-```
-
-### 4. Test
-
-```bash
-# Make a test commit
-git commit -S -m "Test verified commit"
-
-# Check if commit is signed
-git log --show-signature -1
-```
-
-## Troubleshooting
-
-### GPG Agent Issues
-
-```bash
-# Restart GPG agent
-gpgconf --kill gpg-agent
-gpgconf --launch gpg-agent
-
-# Test
-echo "test" | gpg --clearsign
-```
-
-### macOS Issues
-
-```bash
-# Use GPG Suite or configure pinentry
-brew install pinentry-mac
-echo "pinentry-program /opt/homebrew/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
-gpgconf --kill gpg-agent
-```
-
-## IDE Integration
-
-### VS Code
-1. Install **GitLens** extension
-2. Enable "git.enableCommitSigning": true in settings
-
-### IntelliJ/PyCharm
-1. Settings > Version Control > Git > Sign off commits ✅
-
-</details>
+- [macOS Kurulumu](#-macos-kurulumu)
+- [Windows Kurulumu](#-windows-kurulumu)
+- [Linux Kurulumu](#-linux-kurulumu)
+- [IDE Entegrasyonu](#-ide-entegrasyonu)
+- [SSH ile Alternatif Yöntem](#-ssh-ile-imzalama-alternatif)
 
 ---
 
-## 📚 Faydalı Linkler | Useful Links
+## 🍎 macOS Kurulumu
+
+### 1. Homebrew ve GPG Kurulumu
+```bash
+# Homebrew kontrolü
+brew --version
+
+# Homebrew yoksa kur
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# GPG ve pinentry-mac yükle
+brew install gnupg pinentry-mac
+```
+
+### 2. GPG Anahtarı Oluştur
+```bash
+gpg --full-generate-key
+```
+
+**Seçenekler:**
+- Anahtar Tipi: `(1) RSA and RSA`
+- Boyut: `4096`
+- Geçerlilik: `0` (sınırsız)
+- İsim: GitHub profil adın
+- Email: **GitHub hesabındaki email** (önemli!)
+
+### 3. Anahtarını GitHub'a Ekle
+```bash
+# Anahtarlarını listele
+gpg --list-secret-keys --keyid-format=long
+
+# Çıktı örneği:
+# sec   rsa4096/ABC123DEF456 2024-01-01 [SC]
+# ABC123DEF456 = KEY_ID'n
+
+# Public key'i kopyala (KEY_ID'ni değiştir)
+gpg --armor --export ABC123DEF456
+```
+
+**GitHub'a ekle:**
+1. https://github.com/settings/keys
+2. **New GPG key**
+3. Anahtarı yapıştır
+
+### 4. Git Konfigürasyonu
+```bash
+# Homebrew path otomatik bulma (M-series ve Intel uyumlu)
+echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
+
+# GPG agent'ı yeniden başlat
+gpgconf --kill gpg-agent
+
+# Git ayarları (KEY_ID'ni değiştir)
+git config --global user.signingkey ABC123DEF456
+git config --global commit.gpgsign true
+git config --global gpg.program gpg
+
+# Terminal için GPG_TTY
+echo 'export GPG_TTY=$(tty)' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### 5. Test
+```bash
+# GPG test
+echo "test" | gpg --clearsign
+
+# Git test
+git commit --allow-empty -m "Test: Verified commit"
+git log --show-signature -1
+```
+
+### Sorun Giderme (macOS)
+
+**"Inappropriate ioctl for device" hatası:**
+```bash
+export GPG_TTY=$(tty)
+```
+
+**Şifre popup çıkmıyor:**
+```bash
+# pinentry-mac kontrolü
+brew list pinentry-mac
+
+# gpg-agent.conf kontrolü
+cat ~/.gnupg/gpg-agent.conf
+
+# Agent'ı yeniden başlat
+gpgconf --kill gpg-agent
+```
+
+---
+
+## 🪟 Windows Kurulumu
+
+### 1. Gerekli Programları Kur
+
+**Git for Windows:**
+- İndir: https://gitforwindows.org/
+- Kurulum sırasında "Git from the command line" seçeneğini işaretle
+
+**GPG4Win:**
+- İndir: https://www.gpg4win.org/
+- Kurulum sırasında **Kleopatra** bileşenini seç
+
+### 2. GPG Anahtarı Oluştur
+
+**Kolay Yol - Kleopatra ile:**
+1. Kleopatra'yı aç
+2. **File → New OpenPGP Key Pair**
+3. İsim ve GitHub email'ini gir
+4. **Advanced Settings → Key Material → RSA 4096 bit**
+5. **Create**
+
+**Komut Satırı ile:**
+```bash
+gpg --full-generate-key
+
+# Seçenekler:
+# - (1) RSA and RSA
+# - 4096
+# - 0 (sınırsız)
+# - GitHub email'ini kullan
+```
+
+### 3. Anahtarını GitHub'a Ekle
+
+**Kleopatra ile:**
+1. Anahtarına sağ tıkla → **Export**
+2. **Armor** seçeneğini işaretle
+3. Dosyayı aç, içeriği kopyala
+
+**Komut Satırı ile:**
+```bash
+# Anahtarları listele
+gpg --list-secret-keys --keyid-format=long
+
+# Export et (KEY_ID'ni değiştir)
+gpg --armor --export YOUR_KEY_ID
+```
+
+**GitHub'a ekle:**
+1. https://github.com/settings/keys → **New GPG key**
+2. Anahtarı yapıştır
+
+### 4. Git Konfigürasyonu
+```bash
+# PowerShell veya Git Bash'te çalıştır
+git config --global user.signingkey YOUR_KEY_ID
+git config --global commit.gpgsign true
+git config --global gpg.program "C:/Program Files (x86)/GnuPG/bin/gpg.exe"
+```
+
+**GPG path'i bulmak için:**
+```bash
+where gpg
+```
+
+### 5. Test
+```bash
+git commit --allow-empty -m "Test: Verified commit"
+git log --show-signature -1
+```
+
+### Sorun Giderme (Windows)
+
+**GPG şifre sormuyor:**
+- Kleopatra → Settings → GnuPG System
+- "Use pinentry" aktif olmalı
+
+**"No secret key" hatası:**
+```bash
+# KEY_ID'yi kontrol et
+gpg --list-secret-keys --keyid-format=long
+git config --global user.signingkey
+```
+
+---
+
+## 🐧 Linux Kurulumu
+
+### 1. GPG Kurulumu
+```bash
+# Sistem güncelle
+sudo apt update && sudo apt upgrade -y
+
+# GPG yükle
+sudo apt install gnupg2 -y
+
+# Doğrula
+gpg --version
+```
+
+### 2. GPG Anahtarı Oluştur
+```bash
+gpg --full-generate-key
+```
+
+**Seçenekler:**
+- Anahtar Tipi: `(1) RSA and RSA`
+- Boyut: `4096`
+- Geçerlilik: `0`
+- Email: GitHub email'in
+
+### 3. Anahtarını GitHub'a Ekle
+```bash
+# Anahtarları listele
+gpg --list-secret-keys --keyid-format=long
+
+# Export et (KEY_ID'ni değiştir)
+gpg --armor --export YOUR_KEY_ID
+```
+
+**GitHub'a ekle:**
+https://github.com/settings/keys → **New GPG key**
+
+### 4. Git Konfigürasyonu
+```bash
+# Git ayarları (KEY_ID'ni değiştir)
+git config --global user.signingkey YOUR_KEY_ID
+git config --global commit.gpgsign true
+git config --global gpg.program gpg
+
+# Terminal için GPG_TTY
+echo 'export GPG_TTY=$(tty)' >> ~/.bashrc  # veya ~/.zshrc
+source ~/.bashrc
+```
+
+### 5. Test
+```bash
+# GPG test
+echo "test" | gpg --clearsign
+
+# Git test
+git commit --allow-empty -m "Test: Verified commit"
+git log --show-signature -1
+```
+
+### Sorun Giderme (Linux)
+
+**"Inappropriate ioctl for device" hatası:**
+```bash
+export GPG_TTY=$(tty)
+```
+
+**Pinentry sorunu:**
+```bash
+# pinentry-tty yükle
+sudo apt install pinentry-tty
+
+# Ayarla
+echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
+gpgconf --kill gpg-agent
+```
+
+---
+
+## 🎨 IDE Entegrasyonu
+
+### VS Code
+
+**Ayarlar JSON:**
+```json
+{
+  "git.enableCommitSigning": true
+}
+```
+
+**Veya UI'dan:**
+1. `Ctrl/Cmd + ,` (Settings)
+2. "git signing" ara
+3. **Enable Commit Signing** ✅
+
+### IntelliJ IDEA / PyCharm
+
+1. **Settings** → **Version Control** → **Git**
+2. **Configure GPG Key...** tıkla
+3. **Enable commit signing with GPG** ✅
+4. Anahtarını seç → **OK**
+
+### Visual Studio
+
+1. **Tools** → **Options**
+2. **Source Control** → **Git Global Settings**
+3. **Enable commit signing** ✅
+4. GPG path ve KEY_ID'ni gir
+
+---
+
+## 🚀 SSH ile İmzalama (Alternatif)
+
+GPG yerine SSH anahtarınla commit imzalayabilirsin (daha kolay!):
+
+### Kurulum
+```bash
+# SSH formatını aktif et
+git config --global gpg.format ssh
+
+# SSH anahtarını belirt
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+
+# Commit imzalamayı aç
+git config --global commit.gpgsign true
+```
+
+### GitHub Ayarı
+
+1. https://github.com/settings/keys
+2. SSH anahtarını eklerken **"Signing Key"** olarak işaretle ✅
+
+---
+
+## 📚 Faydalı Linkler
 
 - [GitHub GPG Documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification)
 - [Git GPG Documentation](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work)
-- [GPG Suite for macOS](https://gpgtools.org/)
+- [GPG4Win (Windows)](https://www.gpg4win.org/)
+- [GPG Suite (macOS)](https://gpgtools.org/)
 
 ---
 
-*Bu dokümantasyon {{PROJECT_NAME}} projesi için hazırlanmıştır.*
+## ❓ Sık Sorulan Sorular
+
+**S: Her commit'te şifre mi soracak?**
+C: İlk commit'te sorar, sonra cache'lenir (varsayılan 2 saat).
+
+**S: Eski commit'leri imzalayabilir miyim?**
+C: Hayır, sadece yeni commit'ler imzalanır.
+
+**S: GPG mi SSH mi kullanmalıyım?**
+C: SSH daha kolay kurulum, GPG daha yaygın. İkisi de aynı "Verified" rozetini verir.
+
+**S: Email farklı olursa ne olur?**
+C: GitHub email'i ile GPG email'i aynı olmalı, yoksa verified olmaz!
+
+---
+
+**💡 Not:** Global ayarları yaptıktan sonra her commit otomatik imzalanır, `-S` parametresine gerek kalmaz.

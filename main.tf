@@ -423,6 +423,31 @@ resource "github_repository_file" "verified_commits" {
   }
 }
 
+# Project structure rehberi
+resource "github_repository_file" "project_structure" {
+  for_each = { for repo in local.all_repos : repo.repo_name => repo }
+
+  repository = github_repository.repo[each.key].name
+  file       = "docs/PROJECT_STRUCTURE.md"
+  content = replace(
+    file("${path.module}/sample_repo_docs/project-structure.md"),
+    "{{PROJECT_NAME}}", each.value.project_name
+  )
+
+  commit_message      = "Add project structure guidelines"
+  overwrite_on_create = true
+
+  depends_on = [
+    github_repository.repo,
+    github_team_repository.access,
+    github_repository_collaborator.lead
+  ]
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+}
+
 # Local values for processing complex data structures
 locals {
   # Map project names to their first repository (main repo)
