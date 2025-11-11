@@ -1,0 +1,27 @@
+name: Daily Terraform Apply
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Her gece 00:00 UTC
+  workflow_dispatch:      # Manuel tetikleme
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Terraform Apply
+        run: |
+          terraform init -input=false
+          terraform apply -auto-approve
